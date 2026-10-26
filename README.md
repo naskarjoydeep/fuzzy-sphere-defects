@@ -1,1 +1,211 @@
 # fuzzy-sphere-defects
+
+Supporting code and data for the paper *Monodromy Defects and Bulk Renormalization Group Flows on the Fuzzy Sphere*
+by Kimyeong Lee and Joydeep Naskar, arXiv:XXXX.XXXXX.
+
+We put monodromy (twist) line defects of the 3d Ising, O(2), O(3) and O(4) critical points on the fuzzy sphere by
+giving the twisted fermion flavours a fractional Aharonov–Bohm flux through the poles. The lowest Landau level then
+keeps only the orbitals that are regular at both poles, and every matrix element is a closed-form Beta-function
+integral. We diagonalize the resulting Hamiltonians exactly (ED) or with DMRG.
+
+## Citation
+
+If you use this code or data, please cite:
+
+```bibtex
+@article{Lee:2026xxx,
+    author = "Lee, Kimyeong and Naskar, Joydeep",
+    title = "{Monodromy Defects and Bulk Renormalization Group Flows on the Fuzzy Sphere}",
+    eprint = "XXXX.XXXXX",
+    archivePrefix = "arXiv",
+    primaryClass = "hep-th",
+    year = "2026"
+}
+```
+
+## One file per physics question
+
+| file | question |
+|---|---|
+| `fuzzy.py` | the engine: LLL orbitals and Fock bases, the Ising, O(N)-vector and spin-one Hamiltonians with fractional flux, bulk tuning, the regulator's local potential, the anisotropy-flow models |
+| `dmrg.py` | the same Hamiltonians for TeNPy, and a resumable parallel job runner |
+| **`01_known_results/`** | **monodromy defects at the bulk fixed points**. These overlap with Qian (arXiv:2610.27926) and Tang–Zhu (arXiv:2610.31269), which appeared while this work was in progress |
+| `ising_twist.py` | What is the Z2 twist line of the 3d Ising CFT? |
+| `o2_twist.py` | What is the O(2) monodromy line at a general angle, and does it depend on the regulator? |
+| `o3_o4_twists.py` | How do the O(3) and O(4) monodromy lines compare with O(2)? |
+| `free_control.py` | Does the method reproduce the exact free monodromy defect? |
+| **`02_rg_flow/`** | **monodromy defects along bulk RG flows (the new results)** |
+| `trajectory.py` | Where is the critical surface along the anisotropy flows O(3) → O(2), O(3) → Ising and O(4) → O(3)? |
+| `easy_plane.py` | Is the monodromy transported onto the O(2) half-twist, couplings included? |
+| `easy_axis.py` | Is the monodromy erased, leaving a trivial line? |
+| `cpt.py` | Does conformal perturbation theory account for the response of the bulk to the anisotropy? |
+| **`03_spectator_entropy/`** | **spectators and the defect entropy** |
+| `defect_entropy.py` | Does a spectator raise the defect entropy at large N, and why is the answer fixed by the conformal weight? |
+| `entropy_near_four.py` | Near four dimensions, does a spectator still raise the defect entropy, and by how much? |
+| `spectator_response.py` | How do the untwisted spectators respond to a partial twist, and is the twisted line stable? |
+| `cap_entanglement.py` | Can cap entanglement on the fuzzy sphere measure the defect entropy? |
+| **`04_pinned_lines/`** | **pinning, junctions and line stability** |
+| `junctions.py` | How large is the domain-wall dimension of a pinned O(N) line, measured on the lattice? |
+| `ward_stiffness.py` | What is the stiffness of a pinned line, and why does the small-angle curvature converge so slowly? |
+| `wall_correction.py` | Which correction law controls the extrapolation of the wall? |
+| `junction_theory.py` | What do the epsilon expansion and large N predict for the junction of pinned lines? |
+| `monodromy_pinning.py` | Where does pinning a charged mode of the O(2) monodromy lead, and how does the twist change its walls? |
+| **`05_five_dimensions/`** | **a construction in five dimensions** |
+| `fuzzy_s4.py` | Can a monodromy defect be built on the fuzzy four-sphere, and how close is it to the free five-dimensional defect? |
+
+Every question file has a data file of the same name (`ising_twist.json`, …). It holds every result the paper uses
+for that question, so nothing has to be recomputed to check a number.
+
+## Usage
+
+```bash
+pip install -r requirements.txt
+python fuzzy.py test                         # self-tests of the engine
+python 02_rg_flow/easy_plane.py help         # the steps of one question
+python 02_rg_flow/easy_plane.py report       # the paper's numbers, from the stored data
+python 02_rg_flow/easy_plane.py dflow 6 0.5  # recompute one step (here the defect along the flow at N_m = 6)
+```
+
+We ran everything with Python 3.11, numpy 1.25, scipy 1.16, numba 0.58, sympy 1.14, mpmath 1.3 and TeNPy 0.10.
+TeNPy is needed only by `dmrg.py` and the DMRG steps.
+
+## How the files are organized
+
+- **Sections.** Each question file is a set of *sections*, one per original research script. The code inside a
+  section is that script, unchanged except for how it reads and writes results. A section runs on first use and
+  keeps its names to itself, so different sections can reuse names. Run a section with
+  `python <question>.py <section> [args]`, where the arguments are those the original script took; its docstring
+  gives them.
+- **Stored results.** Results are stored under the path they had in the research tree (`twist/...` for the
+  fixed-point defects, `flow/...` for the flows), which is also how the docstrings refer to them. Results computed
+  by a step are written into the data file of the question being run, so delete a key there to force a
+  recomputation.
+- **Notation.** As in the paper, N counts vector components and N_m counts orbitals on S^2. Step arguments keep
+  the research scripts' names, where N is the number of orbitals.
+- **Units.** Dimensions are in bulk units `gamma_B = E(dphi) - E(phi)` of the untwisted model at the same size, or
+  in displacement units, where the lowest neutral spin-one defect level is set to 2. Each section says which.
+- **DMRG jobs.** Job lists are stored under `twist/jobs_*.json`, for example
+  `python dmrg.py twist/jobs_o2wf.json 2 4`.
+- **Five dimensions.** The research scripts of `05_five_dimensions` used paths relative to their folder `s4d/`, so
+  `fuzzy_s4.py` sets the store's base to `s4d/`. Their large intermediate files (twisted bands `band_I*.npz`, 12–56 MB;
+  interaction terms `terms_*.pkl`, up to 13 MB; compressed MPOs) are not stored: `save_band`, `build_I` and `build_I3`
+  rebuild them into `05_five_dimensions/s4d_files/`, which git ignores, and the other steps read them there.
+- **Data sizes.** Most data files are small. `defect_entropy.json` (14 MB) holds the large-N fluctuation tables, and
+  `fuzzy_s4.json` (7 MB) holds the five-dimensional correlator samples.
+- **Code written for this package.** Everything is research code merged verbatim, except three short blocks that only
+  read stored results and print the paper's numbers: `cap_entanglement.py cap_alpha_scan` (the inline code that fitted
+  the stored twist scan was not kept), `fuzzy_s4.py s4_summary` and `free_control.py cd_series`. Each says so in its
+  docstring.
+
+## Results and where they come from
+
+### 01 — fixed-point defects (paper, Appendix A)
+
+| result | step | stored as |
+|---|---|---|
+| Ising twist spectrum, ED N_m ≤ 14 and DMRG to N_m = 20, in bulk and displacement units | `ising_twist.py run_defect`, `dmrg.py`, `ising_twist.py dmrg_tables` | `twist/run_N*.log`, `twist/dmrg_results/ising_*` |
+| Ising even scalar over odd mode, 2.46 at N_m = 14 | `ising_twist.py ising_levels 14 10` | `twist/zgh_results/ising_levels_N14.json` |
+| Ising beta and defect three-point coefficients, N_m = 8–14 | `ising_twist.py ising_amplitudes N` | `.../ising_amplitudes/N*.json` |
+| O(2) charged mode and alpha_c in two regulators | `o2_twist.py run_on_defect o2wf N alphas`, `o2_twist.py run_o2defect`, `o2_twist.py on_tables` | `twist/on_results/o2wf_*`, `twist/dmrg_results/o2*` |
+| Two-mode energies against one loop at any alpha | `o2_twist.py contact_alpha` | `.../contact_alpha.json` |
+| Pole estimates of defect three-point coefficients | `o2_twist.py pole_ope o2wf N alpha [lam]` | `.../pole_ope/*` |
+| O(3) one-plane, centre and reflection twists; O(4) two-plane twist | `o3_o4_twists.py run_on_defect o3wf N alphas`, `o3_o4_twists.py o3_twists centre N` | `twist/on_results/o3wf_*`, `.../o3_twists/*` |
+| Free-scalar control: beta_s^2, correlator, response to the local potential | `free_control.py defect_corr run N [lam]`, `free_control.py core_scaling run o2gauss Ns` | `twist/defect_corr_*`, `twist/core_scaling_*` |
+| Free displacement normalization C_D from the projected rotation, ED to N_m = 10 and DMRG at N_m = 12, 14 (App. C.2) | `free_control.py free_cd`, `free_control.py disp_tilt run o2gauss_lam0 N`, `free_control.py dmrg_ward o2gauss N chi --lam 0`, `free_control.py cd_series` | `twist/disp_results/tilt_o2gauss*`, `twist/dmrg_ward_results/*`, `twist/free_cd.json` |
+
+Representative values:
+
+- **Ising Z2 twist.**
+  - The lowest odd mode is 0.9227 (N_m = 10) and 0.9184 (N_m = 20) in displacement units, against Monte Carlo
+    0.9187(6).
+  - Its bulk-to-defect coefficient is 0.862, flat over N_m = 8–14.
+- **O(2) half-twist.**
+  - The lowest charged mode is 0.9065 (vector, N_m = 14) and 0.8798 (spin-one, N_m = 14).
+  - It becomes relevant at alpha_c = 0.3936 (vector) and 0.3949 (spin-one), both at N_m = 14.
+- **Free scalar, N_m = 10, local potential removed.** beta_1/2^2 = 0.710 and beta_3/2^2 = 0.431, against the exact
+  2/pi and 4/(3 pi).
+- **Free displacement.** C_D rises from 0.0059 (N_m = 6) to 0.0276 (N_m = 14), 12% to 54% of the exact 1/(2 pi^2); an
+  N_m^-1 fit of the last three sizes gives 1.02 times the exact value.
+
+### 02 — RG flows (paper, Sections 4 and 5, Appendices B and C)
+
+| result | step | stored as |
+|---|---|---|
+| critical trajectory, both branches, N_m = 5–9 | `trajectory.py partB_flow N g1,g2,... const` | `flow/partB_const_N*.json` |
+| O(4) → O(3) trajectory | `trajectory.py flow_run o4a A N...`, then `... B N g1,g2,...` | `flow/gf_o4a_*` |
+| trajectory controls (App. C.1) | `trajectory.py traj_validate A\|B\|C N`, `trajectory.py traj_analyze`, `trajectory.py retune_test N` | `flow/traj_*`, `flow/retune_*` |
+| defect levels along the flow, endpoint against O(2) | `easy_plane.py dflow N 0.5`, `easy_plane.py dflow_analyze` | `flow/dflow_a0.500_N*`, `flow/dflow_report.txt` |
+| beta along the flow, with extrapolations | `easy_plane.py dflow_c ope N`, `easy_plane.py dflow_c_endpoint run\|report` | `flow/dflow_c_*` |
+| universal crossover in Y = \|g\| N_m^{y_t/2} | `easy_plane.py crossover_collapse` | `flow/crossover_collapse.json` |
+| O(4) → O(3) endpoint against the O(3) one-plane half-twist | `easy_plane.py dflow_c o4 N` | `flow/dflow_c_o4_N*` |
+| frozen-limit shifts and the local-potential subtraction | `easy_axis.py dflow_frozen N`, `easy_axis.py core_residue frozen N lams`, `easy_axis.py core_residue_analyze` | `flow/core_frozen_*`, `flow/core_residue_report.txt` |
+| pinned-spectator domain wall | `easy_axis.py scan`, `easy_axis.py core_residue pin N lams`, `easy_axis.py core_pin_full Ns` | `twist/spectator_pinning/results/*`, `flow/core_pin_*` |
+| overlap g-function of the residual line, and its controls | `easy_axis.py gfunc_core N lams`, `easy_axis.py gfunc_core pin N`, `easy_axis.py gfunc_ising Ns` | `flow/gfunc_core_*`, `twist/gfunc_ising_results.json` |
+| CPT slopes, curvature and predictions | `cpt.py partA_slopes N`, `cpt.py cpt_lattice N`, `cpt.py cpt_scheme` | `flow/partA_*`, `flow/cpt_*` |
+| amplitudes of the nearly null descendant, to N_m = 16 | `cpt.py imp_thermal N`, `cpt.py imp_admixture`, `cpt.py dmrg_box ...`, `cpt.py box_converge analyze` | `flow/imp_*`, `flow/dmrg_box*`, `flow/box_converge_summary.json` |
+| beta_1/2 of the half-twist through O(eps^2) (App. A, eq:betaeps2) | `easy_plane.py beta_eps`, `beta_check3d`, `sunset_tensor`, `beta_eps2`, `beta_eps2_modes` | `analytic/*.log`, `analytic/open_questions/*.log` |
+
+Representative values:
+
+- **Easy-plane endpoint at N_m = 8, g = -0.09.** The charge-one, charge-two, displacement-candidate and neutral gaps
+  are (0.9402, 2.0135, 2.0478, 1.8963). The independent O(2) model gives (0.9406, 2.0176, 2.0522, 1.8984).
+- **beta.** At the endpoint it is 0.8514, 0.8536, 0.8551, 0.8562 over N_m = 6–9, against 0.8503, 0.8527, 0.8543,
+  0.8555 in the O(2) model. Both extrapolate to 0.865–0.875.
+- **Easy axis at N_m = 9.** The residual line has 1 - g = 4.2 × 10^-5. Pinning phi_3 in the same Hamiltonian gives
+  g = 0.598.
+- **beta through O(eps^2).** At eps = 1, expanded strictly, beta_1/2 = 0.8480 (O(2)) and 0.8453 (O(3)): the ultraviolet
+  O(3) coupling lies 0.0027 below the O(2) one.
+
+### 03 — spectators and the defect entropy (paper, Section 4, Appendix D)
+
+| result | step | stored as |
+|---|---|---|
+| large-N fluctuation trace by sector, its cutoff sums and c = (64/3 pi) h_free (Table 3(a), Figs. 3, 9) | `defect_entropy.py c1 ...`, `c1_run sum ...`, `alpha a L`, `largeN_traces` | `largeN/c1_*.npz`, `largeN/*.log` |
+| the fixed-sector identity, the full twist of Giombi et al., regulator and d = 7/2 checks | `defect_entropy.py sector_* tadpole_* PQ_* fulltwist c1_general_d b1_blocks ... b6_sensitivity` | `largeN/*.log`, `analytic/covariant_entropy/*.log` |
+| the partial twist near d = 4 through O(eps^2), the spectator channel, eps_c (Tables 3(b), 13) | `entropy_near_four.py entropy_eps`, `entropy_bf_channel`, `eps2_*`, `entropy_tables` | `analytic/open_questions/*.log` |
+| neutral line spectrum of a partial twist (Table 12) | `spectator_response.py singlet_channel`, `singlet_check` | `largeN/singlet_channel.log`, `twist/singlet_check.log` |
+| cap entanglement of the free scalar and O(2) model, B_cap | `cap_entanglement.py cap_ee ...`, `cap_alpha_scan`, `cap_two_shapes` | `twist/cap_ee_*`, `twist/cap_two_shapes_*` |
+
+Representative values:
+
+- **Large N, alpha = 1/2.** The direct trace and the closed form both give 0.090063, against log g_free = 0.066717.
+  Near d = 4 at O(eps) the same quantity is (pi/4) alpha^2 (1 - alpha)^2, 45–52% lower.
+- **Partial twists.** For O(3) → O(2) at alpha = 1/2 the spectator raises the entropy by 8.9 × 10^-4 at O(eps) and
+  4.5 × 10^-3 through O(eps^2), against 1.5 × 10^-2 at large N.
+- **Cap entanglement.** The twist dependence has the free shape, but its normalization is B_cap = 1.59, 1.55, 1.59,
+  1.65 at N_m = 6–9.
+
+### 04 — pinned lines (paper, Section 5, Appendix E)
+
+| result | step | stored as |
+|---|---|---|
+| ED and DMRG angle scans of the junction, O(2) vector and spin-one, O(3), O(4); the audit (Tables 4, 6, 10, 11) | `junctions.py theta_on`, `theta_dey`, `dmrg_theta`, `dmrg_dey`, `dmrg_wall`, `o4_package`, `junction_analysis` | `twist/theta_junction_results/*`, `flow/dmrg_pin_out/*`, `fun/paper_2026_10_24_physics/figure_sources/JUNCTION_ROUTE_AUDIT.json` |
+| Ward stiffness C^HQ by ED and DMRG; curvature bias and the tilt tower | `ward_stiffness.py tilt_test`, `dmrg_hq`, `ct_ward`, `dmrg_ward_ct`, `junction_pt2`, `junction_spectral`, `curvature_bias` | `twist/tilt_test_results/*`, `twist/ct_ward_results/*`, `twist/theta_junction_results/*`, `twist/curvature_bias.json` |
+| the slow neutral operator and the wall correction law | `wall_correction.py neutral_parity`, `junction_firstorder*`, `slow_response`, `dey_series` | `twist/theta_junction_results/*`, `twist/dey_series.log` |
+| shape factor at one and two loops, the large-N junction saddle (Table 4, eq:rtwoloop) | `junction_theory.py junction_oneloop`, `assemble`, `junction_largeM*`, `ct_largeN_eps` | `junction_eps2/*`, `largeN/*` |
+| pinned monodromy line: the 3:1 test, the endpoint, its junctions, large N (Tables 8, 14–16) | `monodromy_pinning.py pin_flow`, `kr_*`, `even_*`, `disp_even`, `largeN_straight`, `junction_twisted_largeN` | `twist/kr_results/*`, `twist/even_results/*`, `twist/pin_even_*`, `twist/disp_results/even_*`, `analytic/monodromy_pinning/*` |
+
+Representative values:
+
+- **Shape factor.** One loop gives 1.731 at eps = 1; the [1/1] Padé of the two-loop series gives 1.336 (O(2)), and the
+  lattice tilt-excess fits give 1.38–1.41.
+- **Walls.** The measured O(2) vector wall extrapolates to 0.85–0.91, below one; O(3) gives 0.93–1.04 and O(4)
+  1.01–1.06.
+- **Pinned monodromy line.** At alpha = 0.3 the wall is 0.70–0.71, and the ratios to alpha = 0 follow the large-N
+  saddle (wall ratio 0.87–0.89 against 0.831).
+
+### 05 — five dimensions (paper, Section 6, Appendix F)
+
+| result | step | stored as |
+|---|---|---|
+| twisted bands at I = 2, 3, 4 | `fuzzy_s4.py twisted_band I K`, `save_band I 4 nsave` | `s4d/band_I*.log` |
+| interaction terms of models A and B, the I = 2 coupling map | `fuzzy_s4.py build_I ...`, `build_I3 i3A.json`, `design` | `s4d/i3A.json`, `s4d/i3B.json`, `s4d/i4A.json`, `s4d/designB1c_I2*.json` |
+| bulk scans and defect levels by DMRG (Table 17) | `fuzzy_s4.py bulk_scan ...`, `defect_dmrg ...`, `fig_curves`, `lpar_measure ...`, `par_spin2 dmrg ...` | `s4d/bulkscan/*`, `s4d/defdmrg/*`, `s4d/note/*_points.json`, `s4d/lpar/*` |
+| exact correlator, overlaps, equal-time correlator, tilt Ward identity | `fuzzy_s4.py corr5d exact\|run\|dmrg ...`, `core5d ...`, `ward5d ...`, `ward5d_dmrg ...` | `s4d/lpar/*_corr5d.json`, `*_core5d.json`, `*_ward5d.json` |
+
+Representative values:
+
+- **Table 17.** With the displacement candidate at four, I = 4 model A at h = 6 gives psi_1/2 = 2.018, psi_3/2 = 3.005,
+  the s_par = 1 descendant 3.374 and the s_par = 2 candidate 4.999 (L_par^2 = 6.045), against the free 2, 3, 3, 4.
+- **Normalizations.** At I = 3, b_3/2^2/b_1/2^2 = 0.78 against the exact 4/3. The tilt carries 3.8%, 19% and 11% of its
+  exact weight on the displacement family at I = 2, 3, 4.
