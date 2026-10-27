@@ -50,11 +50,13 @@ If you use this code or data, please cite:
 | `wall_correction.py` | Which correction law controls the extrapolation of the wall? |
 | `junction_theory.py` | What do the epsilon expansion and large N predict for the junction of pinned lines? |
 | `monodromy_pinning.py` | Where does pinning a charged mode of the O(2) monodromy lead, and how does the twist change its walls? |
+| `halftwist_pinning.py` | Does the pinned partial twist survive at half twist at large N, and how do the lowest twisted modes shift at order 1/N? |
 | **`05_five_dimensions/`** | **a construction in five dimensions** |
 | `fuzzy_s4.py` | Can a monodromy defect be built on the fuzzy four-sphere, and how close is it to the free five-dimensional defect? |
 
 Every question file has a data file of the same name (`ising_twist.json`, …). It holds every result the paper uses
-for that question, so nothing has to be recomputed to check a number.
+for that question, so nothing has to be recomputed to check a number. The exception is `05_five_dimensions`, whose data
+file holds only the model couplings its steps start from; the five-dimensional results are not included.
 
 ## Usage
 
@@ -90,12 +92,14 @@ TeNPy is needed only by `dmrg.py` and the DMRG steps.
   `fuzzy_s4.py` sets the store's base to `s4d/`. Their large intermediate files (twisted bands `band_I*.npz`, 12–56 MB;
   interaction terms `terms_*.pkl`, up to 13 MB; compressed MPOs) are not stored: `save_band`, `build_I` and `build_I3`
   rebuild them into `05_five_dimensions/s4d_files/`, which git ignores, and the other steps read them there.
-- **Data sizes.** Most data files are small. `defect_entropy.json` (14 MB) holds the large-N fluctuation tables, and
-  `fuzzy_s4.json` (7 MB) holds the five-dimensional correlator samples.
+  `fuzzy_s4.json` holds only the couplings of the models (`s4d/i3A.json`, `s4d/i3B.json`, `s4d/i4A.json`,
+  `s4d/designB1c_I2*.json`), and the steps add their results to it.
+- **Data sizes.** Most data files are small. The largest, `defect_entropy.json` (14 MB), holds the large-N fluctuation
+  tables.
 - **Code written for this package.** Everything is research code merged verbatim, except three short blocks that only
   read stored results and print the paper's numbers: `cap_entanglement.py cap_alpha_scan` (the inline code that fitted
-  the stored twist scan was not kept), `fuzzy_s4.py s4_summary` and `free_control.py cd_series`. Each says so in its
-  docstring.
+  the stored twist scan was not kept), `fuzzy_s4.py s4_summary` (which needs the five-dimensional results, not
+  included here) and `free_control.py cd_series`. Each says so in its docstring.
 
 ## Results and where they come from
 
@@ -184,6 +188,22 @@ Representative values:
 | the slow neutral operator and the wall correction law | `wall_correction.py neutral_parity`, `junction_firstorder*`, `slow_response`, `dey_series` | `twist/theta_junction_results/*`, `twist/dey_series.log` |
 | shape factor at one and two loops, the large-N junction saddle (Table 4, eq:rtwoloop) | `junction_theory.py junction_oneloop`, `assemble`, `junction_largeM*`, `ct_largeN_eps` | `junction_eps2/*`, `largeN/*` |
 | pinned monodromy line: the 3:1 test, the endpoint, its junctions, large N (Tables 8, 14–16) | `monodromy_pinning.py pin_flow`, `kr_*`, `even_*`, `disp_even`, `largeN_straight`, `junction_twisted_largeN` | `twist/kr_results/*`, `twist/even_results/*`, `twist/pin_even_*`, `twist/disp_results/even_*`, `analytic/monodromy_pinning/*` |
+| half twist: the ingredients, the local expansion and the ball-size checks of the continuation scheme | `halftwist_pinning.py hs1_ingredients`, `hs2_local`, `hs3_eigen` | `analytic/halftwist_gamma/hs1_*`, `hs2_*`, `hs3_*` |
+| half twist: untwisted calibration, every mode with s ≠ 0 shifted by Delta_phi - 1/2 | continuation `halftwist_pinning.py hs4_calib`; cutoff `cutoff_eigen triv 1 1.5`, `cutoff_eigen triv 2 2.5` | `analytic/halftwist_gamma/hs4_calib.json`, `analytic/halftwist_largeN/cutoff_eigen_triv_*` |
+| half twist: the pinning mode, Delta_1/2 = 3/2 - Delta_phi (eq:halftwistpin), and the modes s = 3/2, 5/2 | continuation `halftwist_pinning.py hs5_twisted`; cutoff `cutoff_eigen half 0.5 1`, `half 1.5 2`, `half 2.5 3` | `analytic/halftwist_gamma/hs5_twisted.json`, `analytic/halftwist_largeN/cutoff_eigen_half_*` |
+| general twist: the two lowest twisted modes, (4\|s\| - 3)(Delta_phi - 1/2) (eq:pinlaw) | continuation `halftwist_pinning.py hs6_alpha`; cutoff `cutoff_alpha gate 0.3`, `cutoff_alpha run 0.5 0.5 1.0` (prints -1.00017), `run 0.3 0.3 0.8` (-1.80045), `run 0.3 -0.7 1.2` (-0.19997), in units of Delta_phi - 1/2 | `analytic/halftwist_gamma/hs6_alpha.json`, `analytic/halftwist_largeN/cutoff_alpha_*` |
+
+`halftwist_pinning.py` asks whether the pinned partial twist survives at half twist at large N (paper, App. E.7). At
+N = infinity its condensate vanishes there, because the spectator mode s = 0 reaches the Breitenlohner–Freedman value,
+so the order-1/N shift of the pinning mode s = 1/2 on the unpinned partial twist decides: the pin stays relevant if this
+mode moves below Delta = 1. The shift comes from the exchange of the auxiliary field alone, and the file computes it in
+two schemes with independent codes, analytic continuation in the exponent of the sigma propagator (`hs1_ingredients` …
+`hs6_alpha`) and a chordal cutoff with a finite-part fit (`cutoff_eigen`, `cutoff_alpha`). Both are calibrated on
+untwisted lines, where every mode with s ≠ 0 must shift by Delta_phi - 1/2 = 4/(3 pi^2 N). The number of components is
+N throughout; no orbitals enter. `python 04_pinned_lines/halftwist_pinning.py report` reruns `hs1_ingredients`,
+`hs2_local`, `hs4_calib`, `hs5_twisted`, `hs6_alpha` and the five `cutoff_eigen` runs, and regenerates their stored
+results unchanged, in about 12 minutes (719 s measured, peak memory 1.1 GB), most of it in `hs5_twisted` and `hs6_alpha`. The `cutoff_alpha` steps are not in the report because their logs record run
+times; rerun them one at a time as listed above (about 20 s each) and compare with the values given there.
 
 Representative values:
 
@@ -193,15 +213,32 @@ Representative values:
   1.01–1.06.
 - **Pinned monodromy line.** At alpha = 0.3 the wall is 0.70–0.71, and the ratios to alpha = 0 follow the large-N
   saddle (wall ratio 0.87–0.89 against 0.831).
+- **Half twist at large N.** Shifts are N(Delta - Delta|_{N=inf}) in units of Delta_phi - 1/2 = 4/(3 pi^2 N) = 0.135095/N.
+  - Untwisted calibration, s = 1, 2: +1 exactly in the continuation scheme (Sigma-hat = -n/6 per C_sigma), and
+    0.999999–1.000004 in the cutoff scheme.
+  - Pinning mode at alpha = 1/2: -1 in the continuation scheme (Sigma-hat = 1/12 per C_sigma to 16 digits, unchanged
+    under the ball size and the chi cutoff), and -1.00006 (fit without a log term) or -1.00046 (with one) in the cutoff
+    scheme. So Delta_1/2 = 3/2 - Delta_phi and the pin stays relevant, which gives varsigma_* = Delta_phi - 1/2 and
+    phi_*^2 = 1/(4 pi sqrt(3N)) in eq:halftwistpin.
+  - Higher modes at alpha = 1/2: s = 3/2 gives 0 in the continuation scheme (`hs3_eigen`) and 0.0002–0.0018 in the
+    cutoff scheme; s = 5/2 gives 0.250–0.253 in the cutoff scheme. Neither follows 4|s| - 3.
+  - General twist, |s| = alpha and 1 - alpha: the continuation scheme reproduces 4|s| - 3 to 2.2 × 10^-11 at
+    alpha = 0.1, 0.2, 0.3, 0.4 (`hs6_alpha`) and to 2 × 10^-14 at alpha = 1/2 (`hs5_twisted`), and each pair sums to -2.
+    The cutoff scheme gives -1.80045 and -0.19997 at alpha = 0.3, against -1.8 and -0.2, and -1.00017 at alpha = 1/2,
+    within its fit uncertainty of about 10^-3.
 
 ### 05 — five dimensions (paper, Section 6, Appendix F)
 
-| result | step | stored as |
+| result | step | written as |
 |---|---|---|
 | twisted bands at I = 2, 3, 4 | `fuzzy_s4.py twisted_band I K`, `save_band I 4 nsave` | `s4d/band_I*.log` |
-| interaction terms of models A and B, the I = 2 coupling map | `fuzzy_s4.py build_I ...`, `build_I3 i3A.json`, `design` | `s4d/i3A.json`, `s4d/i3B.json`, `s4d/i4A.json`, `s4d/designB1c_I2*.json` |
+| interaction terms of models A and B, the I = 2 coupling map | `fuzzy_s4.py build_I ...`, `build_I3 i3A.json`, `design` | `terms_*.pkl` in `s4d_files/`, from the couplings `s4d/i3A.json`, `s4d/i3B.json`, `s4d/i4A.json`, `s4d/designB1c_I2*.json` |
 | bulk scans and defect levels by DMRG (Table 17) | `fuzzy_s4.py bulk_scan ...`, `defect_dmrg ...`, `fig_curves`, `lpar_measure ...`, `par_spin2 dmrg ...` | `s4d/bulkscan/*`, `s4d/defdmrg/*`, `s4d/note/*_points.json`, `s4d/lpar/*` |
 | exact correlator, overlaps, equal-time correlator, tilt Ward identity | `fuzzy_s4.py corr5d exact\|run\|dmrg ...`, `core5d ...`, `ward5d ...`, `ward5d_dmrg ...` | `s4d/lpar/*_corr5d.json`, `*_core5d.json`, `*_ward5d.json` |
+
+The five-dimensional results are not included in this repository. The steps write them under the names in the last
+column, and `fuzzy_s4.py report` needs them; `fig_curves` also reads the I = 2 field scan
+`s4d/curve_I2_designB1c_I2.json`, which is not included either. The values below are those of the paper.
 
 Representative values:
 
