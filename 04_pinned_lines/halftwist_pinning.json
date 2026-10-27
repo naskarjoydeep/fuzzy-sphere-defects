@@ -1,0 +1,414 @@
+{
+ "analytic/halftwist_gamma/hs1_ingredients.json": {
+  "C_sigma": "16/(pi**2*N)",
+  "antiperiodic_max_rel_err": 2.427974748062354e-30,
+  "coincidence_dG_rel_err_at_rho_1e-10": 8.333333333333333e-22,
+  "gamma_phi_times_N": "4/(3*pi**2)",
+  "gate": "PASS",
+  "mode_max_rel_err": 6.902532920683853e-31,
+  "mode_rows": [
+   [
+    0.5,
+    0.3,
+    0.048243596700622456,
+    0.048243596700622456
+   ],
+   [
+    0.5,
+    1.2,
+    0.01574695549929663,
+    0.01574695549929663
+   ],
+   [
+    1.5,
+    0.4,
+    0.01910411223880908,
+    0.01910411223880908
+   ],
+   [
+    1.5,
+    2.0,
+    0.0006231734283281914,
+    0.0006231734283281914
+   ],
+   [
+    2.5,
+    0.8,
+    0.0026969648943144992,
+    0.0026969648943144992
+   ],
+   [
+    0.0,
+    0.3,
+    0.08275149240257779,
+    0.08275149240257779
+   ],
+   [
+    0.0,
+    1.5,
+    0.03807118043914821,
+    0.03807118043914821
+   ],
+   [
+    1.0,
+    0.6,
+    0.01844745001317269,
+    0.01844745001317269
+   ],
+   [
+    2.0,
+    1.0,
+    0.0026013382105175204,
+    0.0026013382105175204
+   ],
+   [
+    3.0,
+    0.5,
+    0.005259306285483108,
+    0.005259306285483108
+   ]
+  ]
+ },
+ "analytic/halftwist_gamma/hs2_local.json": {
+  "a": "1/8 - s**2/2",
+  "b": "Delta*(Delta - 1)/4",
+  "chordal_log_coeff": "-(-2*Delta + 2*s + 1)*(2*Delta + 2*s - 1)/24",
+  "chordal_log_coeff_over_onshell": "1/6",
+  "gate": "PASS",
+  "geodesic_log_coeff": "-(-2*Delta + 2*s + 1)*(2*Delta + 2*s - 1)/24",
+  "geodesic_log_coeff_over_onshell": "1/6",
+  "geodesic_rho^-2_coeff": "0",
+  "twisted_leading_R^-2_coeff": "-1/pi",
+  "twisted_odd_coeffs": [
+   "0",
+   "0"
+  ]
+ },
+ "analytic/halftwist_gamma/hs3_eigen.json": {
+  "bulk_vs_closed": [
+   [
+    1,
+    1.5,
+    "-0.166666666666667",
+    "-0.166666666666667",
+    1.4713161724115197e-25
+   ],
+   [
+    2,
+    2.5,
+    "-0.333333333333333",
+    "-0.333333333333333",
+    2.070534515573008e-23
+   ],
+   [
+    1,
+    1.3,
+    "-0.202472019316388",
+    "-0.202472019316388",
+    1.248293527776583e-24
+   ],
+   [
+    0,
+    0.8,
+    "0.0175165368930735",
+    "0.0175165368930735",
+    9.525210861963029e-23
+   ],
+   [
+    2,
+    2.2,
+    "-0.390547092269475",
+    "-0.390547092269475",
+    1.735406396280332e-24
+   ]
+  ],
+  "eps_scan": [
+   [
+    "bulk",
+    1,
+    1.5,
+    [
+     "-0.166666666666667",
+     "-0.166666666666667",
+     "-0.166666666666667"
+    ],
+    2.481541837659083e-24
+   ],
+   [
+    "tw",
+    1.5,
+    2,
+    [
+     "0.0",
+     "8.27180612553028e-25",
+     "2.06795153138257e-25"
+    ],
+    8.271806125530277e-25
+   ]
+  ],
+  "gate": "PASS"
+ },
+ "analytic/halftwist_gamma/hs4_calib.json": {
+  "a_plus_bn2": {
+   "a": "8.27180612553e-25",
+   "actual_n2": "-0.333333333333",
+   "b": "-0.166666666667",
+   "fits": false,
+   "predicted_n2": "-0.666666666667"
+  },
+  "brief_expectation_zero": false,
+  "gamma_phi_times_N": "0.135094911523",
+  "linear_in_n": {
+   "fits": true,
+   "slope": "-0.166666666667"
+  },
+  "rows": [
+   {
+    "Delta": 0.5,
+    "closed": "-1.900310254622313e-25",
+    "dDelta_times_N": "BF: first order degenerates",
+    "err_vs_closed": 1.017211638015259e-24,
+    "minus_n_over_6": "0.0",
+    "n": 0,
+    "num_eps01": "8.271806125530277e-25",
+    "num_eps02": "0.0"
+   },
+   {
+    "Delta": 1.5,
+    "closed": "-0.1666666666666667",
+    "dDelta_times_N": "0.135094911523",
+    "err_vs_closed": 3.539267703794089e-25,
+    "minus_n_over_6": "-0.1666666666666667",
+    "n": 1,
+    "num_eps01": "-0.1666666666666667",
+    "num_eps02": "-0.1666666666666667"
+   },
+   {
+    "Delta": 2.5,
+    "closed": "-0.3333333333333333",
+    "dDelta_times_N": "0.135094911523",
+    "err_vs_closed": 2.1118935462006594e-23,
+    "minus_n_over_6": "-0.3333333333333333",
+    "n": 2,
+    "num_eps01": "-0.3333333333333333",
+    "num_eps02": "-0.3333333333333333"
+   }
+  ],
+  "verdict": "FAILS the brief: Sigma-hat_0(n, 1/2+n) = -n C_sigma/6 = -2 gamma_phi n (not 0, not a + b n^2); the chordal part gives every trivial mode delta Delta = +gamma_phi"
+ },
+ "analytic/halftwist_gamma/hs5_twisted.json": {
+  "Sigma_tw_chmax40": "0.08333333333333333",
+  "Sigma_tw_per_Csigma": {
+   "0.05": "0.08333333333333333",
+   "0.1": "0.08333333333333333",
+   "0.2": "0.08333333333333333"
+  },
+  "chi_tail_shift": 0.0,
+  "delta_gamma_times_N": "-0.27018982304623",
+  "eps_spread": 1.6543612251060553e-24,
+  "gamma_half_times_N": "-0.13509491152312",
+  "gate": "PASS",
+  "regulator_diff": 5.392665383901335e-12,
+  "sign": "negative: pinned line survives",
+  "twisted_only_continuation": "0.125",
+  "twisted_only_hadamard_cutoff": "0.12500000000539",
+  "twisted_only_hadamard_raw": [
+   [
+    "0.01",
+    "0.12486737159916"
+   ],
+   [
+    "0.02",
+    "0.1247347475086"
+   ],
+   [
+    "0.04",
+    "0.12446952949536"
+   ],
+   [
+    "0.08",
+    "0.12393933468666"
+   ]
+  ]
+ },
+ "analytic/halftwist_gamma/hs6_alpha.json": {
+  "gates": {
+   "G_alpha03_mode_maxrel": 2.2797433535801003e-12,
+   "conjugation_diff": 8.844314169920153e-13,
+   "dG_half_vs_closed_maxabs": 4.756613942951774e-15,
+   "gate": "PASS",
+   "twisted_only_half": [
+    [
+     0.5,
+     1.0,
+     0.12499999999959727,
+     0.12500000000172237,
+     0.125,
+     4.0273340218277554e-13,
+     2.1251056470106278e-12
+    ],
+    [
+     1.5,
+     1.2,
+     0.4087137407960569,
+     0.40871374079823336,
+     0.4087137407964634,
+     4.0650816046650107e-13,
+     2.176481217475157e-12
+    ],
+    [
+     0.5,
+     0.8,
+     0.1479301197540932,
+     0.14793011975608755,
+     0.14793011975439221,
+     2.990108161071703e-13,
+     1.9943491302854e-12
+    ]
+   ]
+  },
+  "results": [
+   {
+    "Delta": 0.8,
+    "Ngamma": -0.24317084074172543,
+    "Ngamma_over_Ngammaphi": -1.8000000000008496,
+    "alpha": 0.3,
+    "bulk": -0.014999999999999993,
+    "dG0": -0.021905798622525584,
+    "law": -1.8,
+    "node_doubling": 6.005196340197472e-13,
+    "partition_change": 7.718825578706401e-14,
+    "s": 0.3,
+    "sigma_per_Csigma": 0.09000000000004249,
+    "twisted_only": 0.10500000000004248
+   },
+   {
+    "Delta": 1.2,
+    "Ngamma": -0.027018982304653025,
+    "Ngamma_over_Ngammaphi": -0.20000000000021925,
+    "alpha": 0.3,
+    "bulk": -0.08166666666666667,
+    "dG0": -0.021905798622525584,
+    "law": -0.19999999999999996,
+    "node_doubling": 5.684341886080801e-13,
+    "partition_change": 1.778854841205657e-13,
+    "s": -0.7,
+    "sigma_per_Csigma": 0.023333333333358908,
+    "twisted_only": 0.10500000000002557
+   },
+   {
+    "Ngamma_sum": -0.27018982304637845,
+    "alpha": 0.3,
+    "over_gammaphi": -2.000000000001069
+   },
+   {
+    "Delta": 0.9,
+    "Ngamma": -0.18913287613340551,
+    "Ngamma_over_Ngammaphi": -1.4000000000077106,
+    "alpha": 0.4,
+    "bulk": -0.02666666666666667,
+    "dG0": -0.024491427410694797,
+    "law": -1.4,
+    "node_doubling": 1.841915509004366e-12,
+    "partition_change": 1.2349288258661772e-12,
+    "s": 0.4,
+    "sigma_per_Csigma": 0.09333333333384738,
+    "twisted_only": 0.12000000000051406
+   },
+   {
+    "Delta": 1.1,
+    "Ngamma": -0.08105694691477607,
+    "Ngamma_over_Ngammaphi": -0.6000000000067053,
+    "alpha": 0.4,
+    "bulk": -0.05999999999999998,
+    "dG0": -0.024491427410694797,
+    "law": -0.6000000000000001,
+    "node_doubling": 1.688510442576785e-12,
+    "partition_change": 1.2306267116457548e-12,
+    "s": -0.6,
+    "sigma_per_Csigma": 0.06000000000067054,
+    "twisted_only": 0.12000000000067051
+   },
+   {
+    "Ngamma_sum": -0.27018982304818157,
+    "alpha": 0.4,
+    "over_gammaphi": -2.0000000000144156
+   },
+   {
+    "Delta": 0.6,
+    "Ngamma": -0.3512467699608652,
+    "Ngamma_over_Ngammaphi": -2.6000000000056325,
+    "alpha": 0.1,
+    "bulk": -0.0016666666666666679,
+    "dG0": -0.010342515152672095,
+    "law": -2.6,
+    "node_doubling": 2.3876733923344773e-13,
+    "partition_change": 5.2916004911196524e-14,
+    "s": 0.1,
+    "sigma_per_Csigma": 0.0433333333334272,
+    "twisted_only": 0.04500000000009387
+   },
+   {
+    "Delta": 1.4,
+    "Ngamma": 0.0810569469109094,
+    "Ngamma_over_Ngammaphi": 0.5999999999780834,
+    "alpha": 0.1,
+    "bulk": -0.13500000000000054,
+    "dG0": -0.010342515152672095,
+    "law": 0.6,
+    "node_doubling": 1.2885525979555723e-13,
+    "partition_change": 1.357386425482332e-13,
+    "s": -0.9,
+    "sigma_per_Csigma": -0.0899999999967125,
+    "twisted_only": 0.045000000003288035
+   },
+   {
+    "Ngamma_sum": -0.27018982304995576,
+    "alpha": 0.1,
+    "over_gammaphi": -2.0000000000275486
+   },
+   {
+    "Delta": 0.7,
+    "Ngamma": -0.29720880535135535,
+    "Ngamma_over_Ngammaphi": -2.2000000000036852,
+    "alpha": 0.2,
+    "bulk": -0.006666666666666671,
+    "dG0": -0.01734492520477551,
+    "law": -2.2,
+    "node_doubling": 8.207046153785313e-13,
+    "partition_change": 9.389711230767261e-14,
+    "s": 0.2,
+    "sigma_per_Csigma": 0.07333333333345617,
+    "twisted_only": 0.08000000000012283
+   },
+   {
+    "Delta": 1.3,
+    "Ngamma": 0.027018982303741654,
+    "Ngamma_over_Ngammaphi": 0.1999999999934731,
+    "alpha": 0.2,
+    "bulk": -0.10666666666666673,
+    "dG0": -0.01734492520477551,
+    "law": 0.19999999999999996,
+    "node_doubling": 7.960299086562372e-13,
+    "partition_change": 3.047562202596055e-14,
+    "s": -0.8,
+    "sigma_per_Csigma": -0.02666666666579641,
+    "twisted_only": 0.08000000000087032
+   },
+   {
+    "Ngamma_sum": -0.2701898230476137,
+    "alpha": 0.2,
+    "over_gammaphi": -2.0000000000102123
+   }
+  ]
+ },
+ "analytic/halftwist_largeN/cutoff_alpha_gate_0.3.log": "gate 1 (alpha=1/2 vs arcsin): max |diff| 3.9e-14, max |Im| 2.3e-18\ngate 1b (eta rule doubled, alpha=0.3): max |diff| 3.7e-18\ngate 2 chi=0.4 s=+0.30: mode 0.050442744144 +5.5e-19   Q/4pi^2 0.050442744144   diff 8.2e-16\ngate 2 chi=0.4 s=-0.70: mode 0.034365757877 +0.0e+00   Q/4pi^2 0.034365757877   diff 1.0e-15\ngate 2 chi=0.4 s=+1.30: mode 0.021846622386 -2.2e-18   Q/4pi^2 0.021846622386   diff 7.4e-16\ngate 2 chi=0.4 s=-1.70: mode 0.016797768838 +2.2e-18   Q/4pi^2 0.016797768838   diff 6.6e-17\ngate 2 chi=1.0 s=+0.30: mode 0.027355226641 +5.5e-19   Q/4pi^2 0.027355226641   diff 3.6e-16\ngate 2 chi=1.0 s=-0.70: mode 0.014377041228 +0.0e+00   Q/4pi^2 0.014377041228   diff 5.5e-16\ngate 2 chi=1.0 s=+1.30: mode 0.006268262271 +0.0e+00   Q/4pi^2 0.006268262271   diff 3.8e-16\ngate 2 chi=1.0 s=-1.70: mode 0.003763149024 -1.1e-18   Q/4pi^2 0.003763149024   diff 1.7e-16\ntable built [8s]\ngate 3 (spline vs direct, 200 off-grid points): max |diff| 8.7e-11\n",
+ "analytic/halftwist_largeN/cutoff_alpha_run_0.3_-0.7_1.2.log": "alpha=0.3 s=-0.7 Delta=1.2: table [8s]\n  eps 0.030: I = 885.7949549472  [1s]\n  eps 0.040: I = 495.4868962622  [1s]\n  eps 0.050: I = 315.3399960378  [1s]\n  eps 0.060: I = 217.7578571003  [1s]\n  eps 0.080: I = 121.1104271739  [1s]\n  eps 0.100: I = 76.6314072928  [1s]\n  eps 0.120: I = 52.6076403458  [1s]\n  eps 0.150: I = 33.0869790685  [1s]\n  eps 0.200: I = 18.0693781021  [1s]\n  [with log      eps 0.03-0.20] I0 +0.03781311 log -4.6e-06 -> N delta Delta = -0.027009\n  [with log      eps 0.04-0.20] I0 +0.03780911 log -6.3e-06 -> N delta Delta = -0.027007\n  [with log      eps 0.03-0.15] I0 +0.03781772 log -2.9e-06 -> N delta Delta = -0.027013\n  [no log        eps 0.03-0.20] I0 +0.03782488 -> N delta Delta = -0.027018\n  [no log        eps 0.04-0.20] I0 +0.03782431 -> N delta Delta = -0.027017\n  [no log        eps 0.03-0.15] I0 +0.03782557 -> N delta Delta = -0.027018\n  [no log, cubic eps 0.03-0.20] I0 +0.03782658 -> N delta Delta = -0.027019\n  [no log, cubic eps 0.04-0.20] I0 +0.03782657 -> N delta Delta = -0.027019\n  [no log, cubic eps 0.03-0.15] I0 +0.03782658 -> N delta Delta = -0.027019\nalpha=0.3 s=-0.7 Delta=1.2: N delta Delta = -0.027015 (spread 1.2e-05) = -0.19997 gamma_phi  [17s]\n",
+ "analytic/halftwist_largeN/cutoff_alpha_run_0.3_0.3_0.8.log": "alpha=0.3 s=0.3 Delta=0.8: table [8s]\n  eps 0.030: I = 885.9025749441  [1s]\n  eps 0.040: I = 495.5943600166  [1s]\n  eps 0.050: I = 315.4473014376  [1s]\n  eps 0.060: I = 217.8650020462  [1s]\n  eps 0.080: I = 121.2172449628  [1s]\n  eps 0.100: I = 76.7378896750  [1s]\n  eps 0.120: I = 52.7137791706  [1s]\n  eps 0.150: I = 33.1925874898  [1s]\n  eps 0.200: I = 18.1740631539  [1s]\n  [with log      eps 0.03-0.20] I0 +0.14600084 log +3.4e-05 -> N delta Delta = -0.243335\n  [with log      eps 0.04-0.20] I0 +0.14603013 log +4.6e-05 -> N delta Delta = -0.243384\n  [with log      eps 0.03-0.15] I0 +0.14596718 log +2.1e-05 -> N delta Delta = -0.243279\n  [no log        eps 0.03-0.20] I0 +0.14591492 -> N delta Delta = -0.243192\n  [no log        eps 0.04-0.20] I0 +0.14591911 -> N delta Delta = -0.243199\n  [no log        eps 0.03-0.15] I0 +0.14590992 -> N delta Delta = -0.243183\n  [no log, cubic eps 0.03-0.20] I0 +0.14590257 -> N delta Delta = -0.243171\n  [no log, cubic eps 0.04-0.20] I0 +0.14590260 -> N delta Delta = -0.243171\n  [no log, cubic eps 0.03-0.15] I0 +0.14590254 -> N delta Delta = -0.243171\nalpha=0.3 s=0.3 Delta=0.8: N delta Delta = -0.243231 (spread 2.1e-04) = -1.80045 gamma_phi  [17s]\n",
+ "analytic/halftwist_largeN/cutoff_alpha_run_0.5_0.5_1.0.log": "alpha=0.5 s=0.5 Delta=1.0: table [8s]\n  eps 0.030: I = 883.5663750356  [1s]\n  eps 0.040: I = 493.8395393836  [1s]\n  eps 0.050: I = 314.0413166429  [1s]\n  eps 0.060: I = 216.6915817914  [1s]\n  eps 0.080: I = 120.3345480921  [1s]\n  eps 0.100: I = 76.0296473776  [1s]\n  eps 0.120: I = 52.1218586760  [1s]\n  eps 0.150: I = 32.7170197485  [1s]\n  eps 0.200: I = 17.8149179689  [1s]\n  [with log      eps 0.03-0.20] I0 +0.13515769 log +2.1e-05 -> N delta Delta = -0.135158\n  [with log      eps 0.04-0.20] I0 +0.13517640 log +2.9e-05 -> N delta Delta = -0.135176\n  [with log      eps 0.03-0.15] I0 +0.13513620 log +1.4e-05 -> N delta Delta = -0.135136\n  [no log        eps 0.03-0.20] I0 +0.13510284 -> N delta Delta = -0.135103\n  [no log        eps 0.04-0.20] I0 +0.13510552 -> N delta Delta = -0.135106\n  [no log        eps 0.03-0.15] I0 +0.13509965 -> N delta Delta = -0.135100\n  [no log, cubic eps 0.03-0.20] I0 +0.13509496 -> N delta Delta = -0.135095\n  [no log, cubic eps 0.04-0.20] I0 +0.13509498 -> N delta Delta = -0.135095\n  [no log, cubic eps 0.03-0.15] I0 +0.13509494 -> N delta Delta = -0.135095\nalpha=0.5 s=0.5 Delta=1.0: N delta Delta = -0.135118 (spread 8.1e-05) = -1.00017 gamma_phi  [17s]\n",
+ "analytic/halftwist_largeN/cutoff_eigen_half_0.5_1.log": "  eps 0.030: I = 883.5663750355\n  eps 0.040: I = 493.8395393835\n  eps 0.050: I = 314.0413166428\n  eps 0.060: I = 216.6915817913\n  eps 0.080: I = 120.3345480920\n  eps 0.100: I = 76.0296473775\n  eps 0.120: I = 52.1218586759\n  eps 0.150: I = 32.7170197485\n  eps 0.200: I = 17.8149179688\nhalf s=0.5 Delta=1.0 [with log]: a 0.810569 b -0.516024  log coeff +2.147e-05  I0 +1.351577e-01  -> delta Delta = -1.351577e-01\nhalf s=0.5 Delta=1.0 [no log]: a 0.810569 b -0.516025  I0 +1.351028e-01  -> delta Delta = -1.351028e-01\n",
+ "analytic/halftwist_largeN/cutoff_eigen_half_1.5_2.log": "  eps 0.030: I = 883.4313283711\n  eps 0.040: I = 493.7045300154\n  eps 0.050: I = 313.9063550345\n  eps 0.060: I = 216.5566783206\n  eps 0.080: I = 120.1997916856\n  eps 0.100: I = 75.8950785152\n  eps 0.120: I = 51.9875171508\n  eps 0.150: I = 32.5830923410\n  eps 0.200: I = 17.6818700178\nhalf s=1.5 Delta=2.0 [with log]: a 0.810570 b -0.516033  log coeff -2.458e-04  I0 -7.183833e-04  -> delta Delta = +2.394611e-04\nhalf s=1.5 Delta=2.0 [no log]: a 0.810569 b -0.516021  I0 -9.042978e-05  -> delta Delta = +3.014326e-05\n",
+ "analytic/halftwist_largeN/cutoff_eigen_half_2.5_3.log": "  eps 0.030: I = 883.2625562259\n  eps 0.040: I = 493.5358324627\n  eps 0.050: I = 313.7377530016\n  eps 0.060: I = 216.3881925626\n  eps 0.080: I = 120.0316000558\n  eps 0.100: I = 75.7272619717\n  eps 0.120: I = 51.8201552768\n  eps 0.150: I = 32.4165586819\n  eps 0.200: I = 17.5170951464\nhalf s=2.5 Delta=3.0 [with log]: a 0.810570 b -0.516053  log coeff -7.829e-04  I0 -1.711567e-01  -> delta Delta = +3.423134e-02\nhalf s=2.5 Delta=3.0 [no log]: a 0.810569 b -0.516014  I0 -1.691564e-01  -> delta Delta = +3.383128e-02\n",
+ "analytic/halftwist_largeN/cutoff_eigen_triv_1_1.5.log": "  eps 0.030: I = 900.3625719023\n  eps 0.040: I = 506.3357608114\n  eps 0.050: I = 323.9576484930\n  eps 0.060: I = 224.8880690001\n  eps 0.080: I = 126.3814194210\n  eps 0.100: I = 80.7869597333\n  eps 0.120: I = 56.0196484502\n  eps 0.150: I = 35.7555758629\n  eps 0.200: I = 19.9948574813\ntriv s=1.0 Delta=1.5 [with log]: a 0.810569 b 0.000000  log coeff +1.068e-07  I0 -2.701895e-01  -> delta Delta = +1.350948e-01\ntriv s=1.0 Delta=1.5 [no log]: a 0.810569 b -0.000000  I0 -2.701898e-01  -> delta Delta = +1.350949e-01\n",
+ "analytic/halftwist_largeN/cutoff_eigen_triv_2_2.5.log": "  eps 0.030: I = 900.0924550305\n  eps 0.040: I = 506.0657006795\n  eps 0.050: I = 323.6876613123\n  eps 0.060: I = 224.6181709820\n  eps 0.080: I = 126.1117483622\n  eps 0.100: I = 80.5175804789\n  eps 0.120: I = 55.7506258448\n  eps 0.150: I = 35.4872098120\n  eps 0.200: I = 19.7279098847\ntriv s=2.0 Delta=2.5 [with log]: a 0.810569 b -0.000000  log coeff -8.043e-07  I0 -5.403819e-01  -> delta Delta = +1.350955e-01\ntriv s=2.0 Delta=2.5 [no log]: a 0.810569 b 0.000000  I0 -5.403798e-01  -> delta Delta = +1.350950e-01\n"
+}
