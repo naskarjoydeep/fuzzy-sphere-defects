@@ -872,8 +872,52 @@ Paper, App. A (eq:betaeps2): the full O(eps^2) coefficient of log beta_1/2^2 and
     return namespace(locals(), globals())
 
 
+@section
+def dflow_fill_B0():
+    """Fill the charge-two level B0 = (Q, K, P) = (2, 0, +) at one point of an existing lite dflow run.
+
+dflow_a0.500_N9.json was run with `dflow.py 9 0.5 lite`, which skips the sectors N2, C1, B0, Bm and A0, so Fig. transport(a)
+has no N_m = 9 charge-two point. This recomputes N0 (to check against the stored run) and B0 at the stored (g, h_c, u)
+with the same DFlow class, and writes dflow_fill_B0_a{alpha}_N{N}.json next to it (a name the dflow_a*_N*.json globs of dflow_analyze.py and
+crossover_collapse.py do not match); the original file is not modified.
+usage: python dflow_fill_B0.py N alpha g        e.g. python dflow_fill_B0.py 9 0.5 -0.09
+"""
+    import os
+    import sys
+    import json
+    import time
+    dflow = globals()['dflow']()   # was: import dflow
+
+    HERE = 'flow'
+
+
+    def main(N, alpha, g):
+        src = store.get(os.path.join(HERE, f'dflow_a{alpha:.3f}_N{N}.json'))
+        key = f'{g:+.5f}'
+        p = src['points'][key]
+        h, u = p['h_c'], p['u']
+        df = dflow.DFlow(N, alpha, cache=False)
+        out = dict(N=N, alpha=alpha, g=p['g'], h_c=h, u=u, source=f'dflow_a{alpha:.3f}_N{N}.json', E={}, dims={}, time={})
+        for nm in ('N0', 'B0'):
+            t0 = time.time()
+            s = df.sector(nm)
+            out['dims'][nm] = s['dim']
+            out['E'][nm] = df.levels(nm, h, p['g'], 4)
+            out['time'][nm] = time.time() - t0
+            print(f'{nm}: dim {s["dim"]}, E {out["E"][nm]}  [{out["time"][nm]:.0f}s]', flush=True)
+        e0 = out['E']['N0'][0]
+        out['N0_check'] = abs(e0 - p['E']['N0'][0])
+        out['D'] = {nm: [(x - e0) / u for x in v] for nm, v in out['E'].items()}
+        print(f"N0 ground vs stored run: |diff| = {out['N0_check']:.2e};  B0 gap = {out['D']['B0'][0]:.10f} (bulk units)", flush=True)
+        store.put(os.path.join(HERE, f'dflow_fill_B0_a{alpha:.3f}_N{N}.json'), out)
+
+    def cli(argv):
+        main(int(argv[1]), float(argv[2]), float(argv[3]))
+    return namespace(locals(), globals())
+
+
 STEPS = {'dflow': dflow, 'dflow_analyze': dflow_analyze, 'dflow_c': dflow_c, 'dflow_c_endpoint': dflow_c_endpoint, 'crossover_collapse': crossover_collapse, 'beta_eps': beta_eps,
-         'beta_check3d': beta_check3d, 'sunset_tensor': sunset_tensor, 'beta_eps2': beta_eps2, 'beta_eps2_modes': beta_eps2_modes}
+         'beta_check3d': beta_check3d, 'sunset_tensor': sunset_tensor, 'beta_eps2': beta_eps2, 'beta_eps2_modes': beta_eps2_modes, 'dflow_fill_B0': dflow_fill_B0}
 REPORT = [('dflow_analyze',), ('dflow_c_endpoint', 'report'), ('crossover_collapse',), ('sunset_tensor',), ('beta_check3d',)]
 
 if __name__ == '__main__':
