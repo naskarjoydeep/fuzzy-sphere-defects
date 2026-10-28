@@ -51,6 +51,8 @@ If you use this code or data, please cite:
 | `junction_theory.py` | What do the epsilon expansion and large N predict for the junction of pinned lines? |
 | `monodromy_pinning.py` | Where does pinning a charged mode of the O(2) monodromy lead, and how does the twist change its walls? |
 | `halftwist_pinning.py` | Does the pinned partial twist survive at half twist at large N, and how do the lowest twisted modes shift at order 1/N? |
+| `pinned_flow.py` | Does pinning commute with the easy-plane flow, and what does the untwisted spectator do to the walls? |
+| `pinned_entropy.py` | Can an ordered line of pinned monodromy lines disorder into the unpinned line? Walls against entropy at large N |
 | **`05_five_dimensions/`** | **a construction in five dimensions** |
 | `fuzzy_s4.py` | Can a monodromy defect be built on the fuzzy four-sphere, and how close is it to the free five-dimensional defect? |
 
@@ -111,7 +113,7 @@ TeNPy is needed only by `dmrg.py` and the DMRG steps.
 | Ising even scalar over odd mode, 2.46 at N_m = 14 | `ising_twist.py ising_levels 14 10` | `twist/zgh_results/ising_levels_N14.json` |
 | Ising beta and defect three-point coefficients, N_m = 8–14 | `ising_twist.py ising_amplitudes N` | `.../ising_amplitudes/N*.json` |
 | O(2) charged mode and alpha_c in two regulators | `o2_twist.py run_on_defect o2wf N alphas`, `o2_twist.py run_o2defect`, `o2_twist.py on_tables` | `twist/on_results/o2wf_*`, `twist/dmrg_results/o2*` |
-| Two-mode energies against one loop at any alpha | `o2_twist.py contact_alpha` | `.../contact_alpha.json` |
+| Two-mode energies against one loop at any alpha, with the free control at the same angles (Fig. 7) | `o2_twist.py run_on_defect o2gauss N 0.35,0.45` (N = 6–10), `o2_twist.py contact_alpha` | `twist/on_results/o2gauss_N*`, `.../contact_alpha.json` |
 | Pole estimates of defect three-point coefficients | `o2_twist.py pole_ope o2wf N alpha [lam]` | `.../pole_ope/*` |
 | O(3) one-plane, centre and reflection twists; O(4) two-plane twist | `o3_o4_twists.py run_on_defect o3wf N alphas`, `o3_o4_twists.py o3_twists centre N` | `twist/on_results/o3wf_*`, `.../o3_twists/*` |
 | Free-scalar control: beta_s^2, correlator, response to the local potential | `free_control.py defect_corr run N [lam]`, `free_control.py core_scaling run o2gauss Ns` | `twist/defect_corr_*`, `twist/core_scaling_*` |
@@ -131,14 +133,14 @@ Representative values:
 - **Free displacement.** C_D rises from 0.0059 (N_m = 6) to 0.0276 (N_m = 14), 12% to 54% of the exact 1/(2 pi^2); an
   N_m^-1 fit of the last three sizes gives 1.02 times the exact value.
 
-### 02 — RG flows (paper, Sections 4 and 5, Appendices B and C)
+### 02 — RG flows (paper, Section 3, Appendices B and C)
 
 | result | step | stored as |
 |---|---|---|
 | critical trajectory, both branches, N_m = 5–9 | `trajectory.py partB_flow N g1,g2,... const` | `flow/partB_const_N*.json` |
 | O(4) → O(3) trajectory | `trajectory.py flow_run o4a A N...`, then `... B N g1,g2,...` | `flow/gf_o4a_*` |
 | trajectory controls (App. C.1) | `trajectory.py traj_validate A\|B\|C N`, `trajectory.py traj_analyze`, `trajectory.py retune_test N` | `flow/traj_*`, `flow/retune_*` |
-| defect levels along the flow, endpoint against O(2) | `easy_plane.py dflow N 0.5`, `easy_plane.py dflow_analyze` | `flow/dflow_a0.500_N*`, `flow/dflow_report.txt` |
+| defect levels along the flow, endpoint against O(2) (Fig. 2(a), Table 1) | `easy_plane.py dflow N 0.5`, `easy_plane.py dflow_analyze`; the N_m = 9 scan ran as `dflow 9 0.5 lite`, and `easy_plane.py dflow_fill_B0 9 0.5 -0.09` adds its charge-two level | `flow/dflow_a0.500_N*`, `flow/dflow_fill_B0_a0.500_N9.json`, `flow/dflow_report.txt` |
 | beta along the flow, with extrapolations | `easy_plane.py dflow_c ope N`, `easy_plane.py dflow_c_endpoint run\|report` | `flow/dflow_c_*` |
 | universal crossover in Y = \|g\| N_m^{y_t/2} | `easy_plane.py crossover_collapse` | `flow/crossover_collapse.json` |
 | O(4) → O(3) endpoint against the O(3) one-plane half-twist | `easy_plane.py dflow_c o4 N` | `flow/dflow_c_o4_N*` |
@@ -152,7 +154,8 @@ Representative values:
 Representative values:
 
 - **Easy-plane endpoint at N_m = 8, g = -0.09.** The charge-one, charge-two, displacement-candidate and neutral gaps
-  are (0.9402, 2.0135, 2.0478, 1.8963). The independent O(2) model gives (0.9406, 2.0176, 2.0522, 1.8984).
+  are (0.9402, 2.0135, 2.0478, 1.8963). The independent O(2) model gives (0.9406, 2.0176, 2.0522, 1.8984). The
+  charge-two gaps differ from O(2) by -0.262, -0.229, -0.202 and -0.180% at N_m = 6–9.
 - **beta.** At the endpoint it is 0.8514, 0.8536, 0.8551, 0.8562 over N_m = 6–9, against 0.8503, 0.8527, 0.8543,
   0.8555 in the O(2) model. Both extrapolate to 0.865–0.875.
 - **Easy axis at N_m = 9.** The residual line has 1 - g = 4.2 × 10^-5. Pinning phi_3 in the same Hamiltonian gives
@@ -164,10 +167,11 @@ Representative values:
 
 | result | step | stored as |
 |---|---|---|
-| large-N fluctuation trace by sector, its cutoff sums and c = (64/3 pi) h_free (Table 3(a), Figs. 3, 9) | `defect_entropy.py c1 ...`, `c1_run sum ...`, `alpha a L`, `largeN_traces` | `largeN/c1_*.npz`, `largeN/*.log` |
+| large-N fluctuation trace by sector, its cutoff sums and c = (64/3 pi) h_free (Table 3(a), Figs. 3, 10) | `defect_entropy.py c1 ...`, `c1_run sum ...`, `alpha a L`, `largeN_traces` | `largeN/c1_*.npz`, `largeN/*.log` |
 | the fixed-sector identity, the full twist of Giombi et al., regulator and d = 7/2 checks | `defect_entropy.py sector_* tadpole_* PQ_* fulltwist c1_general_d b1_blocks ... b6_sensitivity` | `largeN/*.log`, `analytic/covariant_entropy/*.log` |
-| the partial twist near d = 4 through O(eps^2), the spectator channel, eps_c (Tables 3(b), 13) | `entropy_near_four.py entropy_eps`, `entropy_bf_channel`, `eps2_*`, `entropy_tables` | `analytic/open_questions/*.log` |
-| neutral line spectrum of a partial twist (Table 12) | `spectator_response.py singlet_channel`, `singlet_check` | `largeN/singlet_channel.log`, `twist/singlet_check.log` |
+| the partial twist near d = 4 through O(eps^2), the spectator channel, eps_c (Tables 3(b), 12) | `entropy_near_four.py entropy_eps`, `entropy_bf_channel`, `eps2_*`, `entropy_tables` | `analytic/open_questions/*.log` |
+| neutral line spectrum of a partial twist (Table 11) | `spectator_response.py singlet_channel`, `singlet_check` | `largeN/singlet_channel.log`, `twist/singlet_check.log` |
+| spectator shifts of the O(3) defects, one twisted real component against a twisted plane (Table 2) | `spectator_response.py spectator_shift_ratio` | `twist/spectator_shift_ratio.*` |
 | cap entanglement of the free scalar and O(2) model, B_cap | `cap_entanglement.py cap_ee ...`, `cap_alpha_scan`, `cap_two_shapes` | `twist/cap_ee_*`, `twist/cap_two_shapes_*` |
 
 Representative values:
@@ -178,20 +182,25 @@ Representative values:
   4.5 × 10^-3 through O(eps^2), against 1.5 × 10^-2 at large N.
 - **Cap entanglement.** The twist dependence has the free shape, but its normalization is B_cap = 1.59, 1.55, 1.59,
   1.65 at N_m = 6–9.
+- **Spectator shifts.** Delta_phi - Dh_sp, with the local potential subtracted and extrapolated linearly in 1/N_m over
+  N_m = 6–9, is 0.049 for the reflection (one twisted real component) and 0.110 for the twisted plane, a ratio of 0.45
+  (0.46–0.47 at each N_m), against 1/2 at large N.
 
 ### 04 — pinned lines (paper, Section 5, Appendix E)
 
 | result | step | stored as |
 |---|---|---|
-| ED and DMRG angle scans of the junction, O(2) vector and spin-one, O(3), O(4); the audit (Tables 4, 6, 10, 11) | `junctions.py theta_on`, `theta_dey`, `dmrg_theta`, `dmrg_dey`, `dmrg_wall`, `o4_package`, `junction_analysis` | `twist/theta_junction_results/*`, `flow/dmrg_pin_out/*`, `fun/paper_2026_10_24_physics/figure_sources/JUNCTION_ROUTE_AUDIT.json` |
+| ED and DMRG angle scans of the junction, O(2) vector and spin-one, O(3), O(4); the audit (Tables 4, 5, 13–15, Figs. 5, 11) | `junctions.py theta_on`, `theta_dey`, `dmrg_theta`, `dmrg_dey`, `dmrg_wall`, `o4_package`, `junction_analysis` | `twist/theta_junction_results/*`, `flow/dmrg_pin_out/*`, `fun/paper_2026_10_24_physics/figure_sources/JUNCTION_ROUTE_AUDIT.json` |
 | Ward stiffness C^HQ by ED and DMRG; curvature bias and the tilt tower | `ward_stiffness.py tilt_test`, `dmrg_hq`, `ct_ward`, `dmrg_ward_ct`, `junction_pt2`, `junction_spectral`, `curvature_bias` | `twist/tilt_test_results/*`, `twist/ct_ward_results/*`, `twist/theta_junction_results/*`, `twist/curvature_bias.json` |
 | the slow neutral operator and the wall correction law | `wall_correction.py neutral_parity`, `junction_firstorder*`, `slow_response`, `dey_series` | `twist/theta_junction_results/*`, `twist/dey_series.log` |
 | shape factor at one and two loops, the large-N junction saddle (Table 4, eq:rtwoloop) | `junction_theory.py junction_oneloop`, `assemble`, `junction_largeM*`, `ct_largeN_eps` | `junction_eps2/*`, `largeN/*` |
-| pinned monodromy line: the 3:1 test, the endpoint, its junctions, large N (Tables 8, 14–16) | `monodromy_pinning.py pin_flow`, `kr_*`, `even_*`, `disp_even`, `largeN_straight`, `junction_twisted_largeN` | `twist/kr_results/*`, `twist/even_results/*`, `twist/pin_even_*`, `twist/disp_results/even_*`, `analytic/monodromy_pinning/*` |
+| pinned monodromy line: the 3:1 test, the endpoint, its junctions, large N (Tables 7, 16–19) | `monodromy_pinning.py pin_flow`, `kr_*`, `even_*`, `disp_even`, `largeN_straight`, `junction_twisted_largeN` | `twist/kr_results/*`, `twist/even_results/*`, `twist/pin_even_*`, `twist/disp_results/even_*`, `analytic/monodromy_pinning/*` |
 | half twist: the ingredients, the local expansion and the ball-size checks of the continuation scheme | `halftwist_pinning.py hs1_ingredients`, `hs2_local`, `hs3_eigen` | `analytic/halftwist_gamma/hs1_*`, `hs2_*`, `hs3_*` |
 | half twist: untwisted calibration, every mode with s ≠ 0 shifted by Delta_phi - 1/2 | continuation `halftwist_pinning.py hs4_calib`; cutoff `cutoff_eigen triv 1 1.5`, `cutoff_eigen triv 2 2.5` | `analytic/halftwist_gamma/hs4_calib.json`, `analytic/halftwist_largeN/cutoff_eigen_triv_*` |
 | half twist: the pinning mode, Delta_1/2 = 3/2 - Delta_phi (eq:halftwistpin), and the modes s = 3/2, 5/2 | continuation `halftwist_pinning.py hs5_twisted`; cutoff `cutoff_eigen half 0.5 1`, `half 1.5 2`, `half 2.5 3` | `analytic/halftwist_gamma/hs5_twisted.json`, `analytic/halftwist_largeN/cutoff_eigen_half_*` |
 | general twist: the two lowest twisted modes, (4\|s\| - 3)(Delta_phi - 1/2) (eq:pinlaw) | continuation `halftwist_pinning.py hs6_alpha`; cutoff `cutoff_alpha gate 0.3`, `cutoff_alpha run 0.5 0.5 1.0` (prints -1.00017), `run 0.3 0.3 0.8` (-1.80045), `run 0.3 -0.7 1.2` (-0.19997), in units of Delta_phi - 1/2 | `analytic/halftwist_gamma/hs6_alpha.json`, `analytic/halftwist_largeN/cutoff_alpha_*` |
+| the pinned O(3) half-twist along the easy-plane flow, against the pinned O(2) monodromy line (Fig. 4) | `pinned_flow.py pinned_flow gate N`, `run N 0,-0.0025,-0.005,-0.01,-0.02,-0.045,-0.09` (N = 6, 7, 8), `robust N` | `flow/pinned_flow_N*.json`, `flow/pinned_flow_robust_*`, with `twist/pin_even_o2wf_N*_a0.5.json` |
+| entropic and wall thresholds of an ordered line at large N, at leading order and with the entropy of order N^0 (Tables 8, 20) | `pinned_entropy.py entropy_window`, `pinned_det trace 1600 1600 160 160`, `twisted_det trace alpha 1000 1000 120 120` (alpha = 0, 0.1, …, 0.5), `twisted_summary` | `analytic/pinned_entropy/entropy_window.json`, `largeN/pinned_det_*`, `largeN/twisted_det_*` |
 
 `halftwist_pinning.py` asks whether the pinned partial twist survives at half twist at large N (paper, App. E.7). At
 N = infinity its condensate vanishes there, because the spectator mode s = 0 reaches the Breitenlohner–Freedman value,
@@ -204,6 +213,14 @@ N throughout; no orbitals enter. `python 04_pinned_lines/halftwist_pinning.py re
 `hs2_local`, `hs4_calib`, `hs5_twisted`, `hs6_alpha` and the five `cutoff_eigen` runs, and regenerates their stored
 results unchanged, in about 12 minutes (719 s measured, peak memory 1.1 GB), most of it in `hs5_twisted` and `hs6_alpha`. The `cutoff_alpha` steps are not in the report because their logs record run
 times; rerun them one at a time as listed above (about 20 s each) and compare with the values given there.
+
+`pinned_flow.py` follows the pinned O(3) half-twist along the easy-plane flow and divides each quantity by the pinned
+O(2) monodromy line at the same N_m; `report` runs the gate, which sends the O(2) model through the same code and
+reproduces that line to all printed digits. `pinned_entropy.py` sets the entropy released by pinning, at leading order
+and at order N^0, against the leading wall threshold. Its `report` reruns `entropy_window` (about 5 minutes) and
+`twisted_summary`, which reads the stored regulated traces; the traces themselves take 10 minutes (`pinned_det`) to an
+hour (`twisted_det`, per twist), and their (lam, mode) tables are rebuilt into `04_pinned_lines/pinned_entropy_files/`,
+which git ignores.
 
 Representative values:
 
@@ -226,6 +243,13 @@ Representative values:
     alpha = 0.1, 0.2, 0.3, 0.4 (`hs6_alpha`) and to 2 × 10^-14 at alpha = 1/2 (`hs5_twisted`), and each pair sums to -2.
     The cutoff scheme gives -1.80045 and -0.19997 at alpha = 0.3, against -1.8 and -0.2, and -1.00017 at alpha = 1/2,
     within its fit uncertainty of about 10^-3.
+- **Pinned flow.** At the easy-plane endpoint g = -0.09 the pinned O(3) line matches the pinned O(2) monodromy line at
+  N_m = 6–8: C^HQ to 0.03% and the wall to 0.5%. At g = 0 the spectator raises the wall by 2.8, 4.1 and 5.2%. Keeping the
+  local potential or reweighting the second pin bilinear moves the endpoint ratios by at most 0.1%.
+- **Entropy against walls.** The entropy released by pinning at order N^0 is +0.0294, +0.0255, +0.0131, -0.0092,
+  -0.0399 and -0.0549 at alpha = 0, 0.1, …, 0.5 (log g_pin = -0.153673 N - 0.0294 at alpha = 0). It moves the entropic
+  threshold from 4.51 to 4.32 at alpha = 0 and from 14.59 to 15.75 at alpha = 1/2, above the leading wall threshold
+  (3.63 to 7.62) at every twist.
 
 ### 05 — five dimensions (paper, Section 6, Appendix F)
 
@@ -233,7 +257,7 @@ Representative values:
 |---|---|---|
 | twisted bands at I = 2, 3, 4 | `fuzzy_s4.py twisted_band I K`, `save_band I 4 nsave` | `s4d/band_I*.log` |
 | interaction terms of models A and B, the I = 2 coupling map | `fuzzy_s4.py build_I ...`, `build_I3 i3A.json`, `design` | `terms_*.pkl` in `s4d_files/`, from the couplings `s4d/i3A.json`, `s4d/i3B.json`, `s4d/i4A.json`, `s4d/designB1c_I2*.json` |
-| bulk scans and defect levels by DMRG (Table 17) | `fuzzy_s4.py bulk_scan ...`, `defect_dmrg ...`, `fig_curves`, `lpar_measure ...`, `par_spin2 dmrg ...` | `s4d/bulkscan/*`, `s4d/defdmrg/*`, `s4d/note/*_points.json`, `s4d/lpar/*` |
+| bulk scans and defect levels by DMRG (Table 21) | `fuzzy_s4.py bulk_scan ...`, `defect_dmrg ...`, `fig_curves`, `lpar_measure ...`, `par_spin2 dmrg ...` | `s4d/bulkscan/*`, `s4d/defdmrg/*`, `s4d/note/*_points.json`, `s4d/lpar/*` |
 | exact correlator, overlaps, equal-time correlator, tilt Ward identity | `fuzzy_s4.py corr5d exact\|run\|dmrg ...`, `core5d ...`, `ward5d ...`, `ward5d_dmrg ...` | `s4d/lpar/*_corr5d.json`, `*_core5d.json`, `*_ward5d.json` |
 
 The five-dimensional results are not included in this repository. The steps write them under the names in the last
@@ -242,7 +266,7 @@ column, and `fuzzy_s4.py report` needs them; `fig_curves` also reads the I = 2 f
 
 Representative values:
 
-- **Table 17.** With the displacement candidate at four, I = 4 model A at h = 6 gives psi_1/2 = 2.018, psi_3/2 = 3.005,
+- **Table 21.** With the displacement candidate at four, I = 4 model A at h = 6 gives psi_1/2 = 2.018, psi_3/2 = 3.005,
   the s_par = 1 descendant 3.374 and the s_par = 2 candidate 4.999 (L_par^2 = 6.045), against the free 2, 3, 3, 4.
 - **Normalizations.** At I = 3, b_3/2^2/b_1/2^2 = 0.78 against the exact 4/3. The tilt carries 3.8%, 19% and 11% of its
   exact weight on the displacement family at I = 2, 3, 4.
