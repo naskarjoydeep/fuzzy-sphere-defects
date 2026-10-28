@@ -182,8 +182,52 @@ usage: python singlet_check.py
     return namespace(locals(), globals())
 
 
-STEPS = {'singlet_channel': singlet_channel, 'singlet_check': singlet_check}
-REPORT = [('singlet_channel',), ('singlet_check',)]
+@section
+def spectator_shift_ratio():
+    """Spectator shifts of the O(3) defects with one twisted real component and with a twisted plane (Table 2, last row).
+
+shift = Delta_phi - Dh_sp, both in the bulk unit of the tuned model (the tuning sets Delta_phi = 0.518942 exactly), with the
+local potential subtracted. Plane: the (1,2) pair twisted, spectator phi_3, the s = 0 odd level of core_scaling_o3wf.json
+(the lattice column of Table 2 extrapolates it to 0.41). Component: the reflection diag(1, 1, -1), only phi_3 twisted,
+spectators phi_1, phi_2, the lowest charge-one s = 0 level (sector 1|0|+1) of o3_twists/reflection_N*.json at lam = 0.
+Both are extrapolated linearly in 1/N_m over N_m = 6-9 (and 7-9 as a check). Large N predicts the ratio 1/2.
+usage: python spectator_shift_ratio.py      -> spectator_shift_ratio.json
+"""
+    import os
+    import json
+    import numpy as np
+
+    HERE = 'twist'
+    DPHI = 0.518942
+    NS = (6, 7, 8, 9)
+
+
+    def main():
+        cs = store.get(os.path.join(HERE, 'core_scaling_o3wf.json'))
+        plane = np.array([cs[str(n)]['odd_s0#0']['level'] for n in NS])
+        comp = np.array([store.get(os.path.join(HERE, '..', 'fun', 'combined_2026_10_22', 'analysis', 'o3_twists',
+                                                   f'reflection_N{n}.json'))['lam']['0']['1|0|+1'][0] for n in NS])
+        N = np.array(NS, float)
+        out = dict(N=list(NS), plane=plane.tolist(), component=comp.tolist(),
+                   ratio_finite=[(DPHI - c) / (DPHI - p) for c, p in zip(comp, plane)], fits={})
+        for lab, sl in (('6-9', slice(None)), ('7-9', slice(1, None))):
+            pe = np.polyfit(1 / N[sl], plane[sl], 1)[1]
+            ce = np.polyfit(1 / N[sl], comp[sl], 1)[1]
+            out['fits'][lab] = dict(plane=pe, component=ce, shift_plane=DPHI - pe, shift_component=DPHI - ce,
+                                    ratio=(DPHI - ce) / (DPHI - pe))
+            print(f'N_m = {lab}: plane {pe:.4f}, component {ce:.4f}; shifts {DPHI - ce:.3f} / {DPHI - pe:.3f}, '
+                  f'ratio {(DPHI - ce) / (DPHI - pe):.3f}')
+        print('finite-size ratios', ' '.join(f'{x:.3f}' for x in out['ratio_finite']))
+        store.put(os.path.join(HERE, 'spectator_shift_ratio.json'), out)
+
+    def cli(argv):
+        with fuzzy.logged('twist/spectator_shift_ratio.log'):
+            main()
+    return namespace(locals(), globals())
+
+
+STEPS = {'singlet_channel': singlet_channel, 'singlet_check': singlet_check, 'spectator_shift_ratio': spectator_shift_ratio}
+REPORT = [('singlet_channel',), ('singlet_check',), ('spectator_shift_ratio',)]
 
 if __name__ == '__main__':
     fuzzy.cli(__file__, STEPS, REPORT)

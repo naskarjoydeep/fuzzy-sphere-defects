@@ -1,4 +1,47 @@
 {
  "largeN/singlet_channel.log": "check alpha = 0: zeros [2.000847 4.001906] (expect 2, 4), poles [1. 3. 5. 7.] (1, 3, ...)\nalpha=0.50 N=    3: naive composite 2D_sp = 0.7298 (removed pole)  lowest singlets [1.2834 2.5378]  first poles [0.7298 2.0359 2.7298]\nalpha=0.50 N=    4: naive composite 2D_sp = 0.7974 (removed pole)  lowest singlets [1.4353 2.4597]  first poles [0.7974 2.0203 2.7974]\nalpha=0.50 N=    6: naive composite 2D_sp = 0.8649 (removed pole)  lowest singlets [1.5719 2.3685]  first poles [0.8649 2.0091 2.8649]\nalpha=0.50 N=   10: naive composite 2D_sp = 0.9189 (removed pole)  lowest singlets [1.6855 2.2818]  first poles [0.9189 2.0033 2.9189]\nalpha=0.50 N=   30: naive composite 2D_sp = 0.9730 (removed pole)  lowest singlets [1.8283 2.162 ]  first poles [0.973  2.0004 2.973 ]\nalpha=0.50 N=  100: naive composite 2D_sp = 0.9919 (removed pole)  lowest singlets [1.9084 2.0893]  first poles [0.9919 2.     2.9919]\nalpha=0.50 N= 1000: naive composite 2D_sp = 0.9992 (removed pole)  lowest singlets [1.9718 2.0288]  first poles [0.9992 2.     2.9992]\nalpha=0.25 N=    3: naive composite 2D_sp = 0.7878 (removed pole)  lowest singlets [1.1591 2.0227]  first poles [0.7878 1.5432 2.5149]\nalpha=0.25 N=    4: naive composite 2D_sp = 0.8408 (removed pole)  lowest singlets [1.2682 2.0131]  first poles [0.8408 1.5247 2.5084]\nalpha=0.25 N=    6: naive composite 2D_sp = 0.8939 (removed pole)  lowest singlets [1.3553 2.0062]  first poles [0.8939 1.5111 2.5037]\nalpha=0.25 N=   10: naive composite 2D_sp = 0.9363 (removed pole)  lowest singlets [1.4163 2.0027]  first poles [0.9363 1.504  2.5014]\nalpha=0.25 N=   30: naive composite 2D_sp = 0.9788 (removed pole)  lowest singlets [1.4728 2.001 ]  first poles [0.9788 1.5005 2.5002]\nalpha=0.25 N=  100: naive composite 2D_sp = 0.9936 (removed pole)  lowest singlets [1.4919 2.0009]  first poles [0.9936 1.5    2.5   ]\nalpha=0.25 N= 1000: naive composite 2D_sp = 0.9994 (removed pole)  lowest singlets [1.4992 2.0008]  first poles [0.9994 1.5    2.5   ]\nalpha=0.10 N=    3: naive composite 2D_sp = 0.8897 (removed pole)  lowest singlets [1.035  2.0068]  first poles [0.8897 1.2284 2.8034]\nalpha=0.10 N=    4: naive composite 2D_sp = 0.9173 (removed pole)  lowest singlets [1.0919 2.0042]  first poles [0.9173 1.2164 2.8019]\nalpha=0.10 N=    6: naive composite 2D_sp = 0.9448 (removed pole)  lowest singlets [1.1355 2.0023]  first poles [0.9448 1.2075 2.8008]\nalpha=0.10 N=   10: naive composite 2D_sp = 0.9669 (removed pole)  lowest singlets [1.164  2.0014]  first poles [0.9669 1.2027 2.8003]\nalpha=0.10 N=   30: naive composite 2D_sp = 0.9890 (removed pole)  lowest singlets [1.1887 2.0009]  first poles [0.989  1.2003 2.8   ]\nalpha=0.10 N=  100: naive composite 2D_sp = 0.9967 (removed pole)  lowest singlets [1.1967 2.0009]  first poles [0.9967 1.2    2.8   ]\nalpha=0.10 N= 1000: naive composite 2D_sp = 0.9997 (removed pole)  lowest singlets [1.1997 2.0008]  first poles [0.9997 1.2    2.8   ]\n",
- "twist/singlet_check.log": "no twist: zeros [2.0005, 4.0011] (target 2, 4)\nN= 3 alpha=0.50: lowest neutral zero 1.2833 between poles 0.7298 and 2.0359  (sqrt sigma* 0.1351)\nN= 3 alpha=0.25: lowest neutral zero 1.1590 between poles 0.7878 and 1.5432  (sqrt sigma* 0.1061)\nN= 3 alpha=0.10: lowest neutral zero 1.0350 between poles 0.8897 and 1.2284  (sqrt sigma* 0.0552)\nN= 4 alpha=0.50: lowest neutral zero 1.4351 between poles 0.7974 and 2.0203  (sqrt sigma* 0.1013)\nN= 4 alpha=0.25: lowest neutral zero 1.2682 between poles 0.8408 and 1.5247  (sqrt sigma* 0.0796)\nN= 4 alpha=0.10: lowest neutral zero 1.0919 between poles 0.9173 and 1.2164  (sqrt sigma* 0.0414)\nN= 6 alpha=0.50: lowest neutral zero 1.5717 between poles 0.8649 and 2.0091  (sqrt sigma* 0.0675)\nN= 6 alpha=0.25: lowest neutral zero 1.3553 between poles 0.8939 and 1.5111  (sqrt sigma* 0.0531)\nN= 6 alpha=0.10: lowest neutral zero 1.1355 between poles 0.9448 and 1.2075  (sqrt sigma* 0.0276)\nN=10 alpha=0.50: lowest neutral zero 1.6853 between poles 0.9189 and 2.0033  (sqrt sigma* 0.0405)\nN=10 alpha=0.25: lowest neutral zero 1.4163 between poles 0.9363 and 1.5040  (sqrt sigma* 0.0318)\nN=10 alpha=0.10: lowest neutral zero 1.1640 between poles 0.9669 and 1.2027  (sqrt sigma* 0.0165)\n"
+ "twist/singlet_check.log": "no twist: zeros [2.0005, 4.0011] (target 2, 4)\nN= 3 alpha=0.50: lowest neutral zero 1.2833 between poles 0.7298 and 2.0359  (sqrt sigma* 0.1351)\nN= 3 alpha=0.25: lowest neutral zero 1.1590 between poles 0.7878 and 1.5432  (sqrt sigma* 0.1061)\nN= 3 alpha=0.10: lowest neutral zero 1.0350 between poles 0.8897 and 1.2284  (sqrt sigma* 0.0552)\nN= 4 alpha=0.50: lowest neutral zero 1.4351 between poles 0.7974 and 2.0203  (sqrt sigma* 0.1013)\nN= 4 alpha=0.25: lowest neutral zero 1.2682 between poles 0.8408 and 1.5247  (sqrt sigma* 0.0796)\nN= 4 alpha=0.10: lowest neutral zero 1.0919 between poles 0.9173 and 1.2164  (sqrt sigma* 0.0414)\nN= 6 alpha=0.50: lowest neutral zero 1.5717 between poles 0.8649 and 2.0091  (sqrt sigma* 0.0675)\nN= 6 alpha=0.25: lowest neutral zero 1.3553 between poles 0.8939 and 1.5111  (sqrt sigma* 0.0531)\nN= 6 alpha=0.10: lowest neutral zero 1.1355 between poles 0.9448 and 1.2075  (sqrt sigma* 0.0276)\nN=10 alpha=0.50: lowest neutral zero 1.6853 between poles 0.9189 and 2.0033  (sqrt sigma* 0.0405)\nN=10 alpha=0.25: lowest neutral zero 1.4163 between poles 0.9363 and 1.5040  (sqrt sigma* 0.0318)\nN=10 alpha=0.10: lowest neutral zero 1.1640 between poles 0.9669 and 1.2027  (sqrt sigma* 0.0165)\n",
+ "twist/spectator_shift_ratio.json": {
+  "N": [
+   6,
+   7,
+   8,
+   9
+  ],
+  "component": [
+   0.4802320131951449,
+   0.4787679776906824,
+   0.47760042212541054,
+   0.4766399822381096
+  ],
+  "fits": {
+   "6-9": {
+    "component": 0.4695082297582003,
+    "plane": 0.40882513355638556,
+    "ratio": 0.4489209676803906,
+    "shift_component": 0.049433770241799735,
+    "shift_plane": 0.11011686644361446
+   },
+   "7-9": {
+    "component": 0.4692115243729148,
+    "plane": 0.40784891277321356,
+    "ratio": 0.44764689566655896,
+    "shift_component": 0.04973047562708521,
+    "shift_plane": 0.11109308722678646
+   }
+  },
+  "plane": [
+   0.4358208399539709,
+   0.4321874692226073,
+   0.42923511524184305,
+   0.42676444337804337
+  ],
+  "ratio_finite": [
+   0.4657055650260306,
+   0.4630769361475991,
+   0.46085178396332976,
+   0.45891884437099617
+  ]
+ },
+ "twist/spectator_shift_ratio.log": "N_m = 6-9: plane 0.4088, component 0.4695; shifts 0.049 / 0.110, ratio 0.449\nN_m = 7-9: plane 0.4078, component 0.4692; shifts 0.050 / 0.111, ratio 0.448\nfinite-size ratios 0.466 0.463 0.461 0.459\n"
 }
