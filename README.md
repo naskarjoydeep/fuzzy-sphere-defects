@@ -51,7 +51,7 @@ If you use this code or data, please cite:
 | `junction_theory.py` | What do the epsilon expansion and large N predict for the junction of pinned lines? |
 | `monodromy_pinning.py` | Where does pinning a charged mode of the O(2) monodromy lead, and how does the twist change its walls? |
 | `halftwist_pinning.py` | Does the pinned partial twist survive at half twist at large N, and how do the lowest twisted modes shift at order 1/N? |
-| `pinned_flow.py` | Does pinning commute with the easy-plane flow, and what does the untwisted spectator do to the walls? |
+| `pinned_flow.py` | Does pinning commute with the bulk flows, and which pin survives which branch? |
 | `pinned_entropy.py` | Can an ordered line of pinned monodromy lines disorder into the unpinned line? Walls against entropy at large N |
 | **`05_five_dimensions/`** | **a construction in five dimensions** |
 | `fuzzy_s4.py` | Can a monodromy defect be built on the fuzzy four-sphere, and how close is it to the free five-dimensional defect? |
@@ -200,6 +200,7 @@ Representative values:
 | half twist: the pinning mode, Delta_1/2 = 3/2 - Delta_phi (eq:halftwistpin), and the modes s = 3/2, 5/2 | continuation `halftwist_pinning.py hs5_twisted`; cutoff `cutoff_eigen half 0.5 1`, `half 1.5 2`, `half 2.5 3` | `analytic/halftwist_gamma/hs5_twisted.json`, `analytic/halftwist_largeN/cutoff_eigen_half_*` |
 | general twist: the two lowest twisted modes, (4\|s\| - 3)(Delta_phi - 1/2) (eq:pinlaw) | continuation `halftwist_pinning.py hs6_alpha`; cutoff `cutoff_alpha gate 0.3`, `cutoff_alpha run 0.5 0.5 1.0` (prints -1.00017), `run 0.3 0.3 0.8` (-1.80045), `run 0.3 -0.7 1.2` (-0.19997), in units of Delta_phi - 1/2 | `analytic/halftwist_gamma/hs6_alpha.json`, `analytic/halftwist_largeN/cutoff_alpha_*` |
 | the pinned O(3) half-twist along the easy-plane flow, against the pinned O(2) monodromy line (Fig. 4) | `pinned_flow.py pinned_flow gate N`, `run N 0,-0.0025,-0.005,-0.01,-0.02,-0.045,-0.09` (N = 6, 7, 8), `robust N` | `flow/pinned_flow_N*.json`, `flow/pinned_flow_robust_*`, with `twist/pin_even_o2wf_N*_a0.5.json` |
+| pins along the two branches: the phi_3 pin ends on the pinned Ising line on the easy axis, the charged pin there and the phi_3 pin on the easy plane decouple (App. E.9, Table 21, Fig. 1) | `pinned_flow.py pin_branches gate N` (N = 5, 6, 7), `neutral N frozen,0.09,0.03,0.01,0,-0.01,-0.03,-0.09` (N = 6, 7, 8), `neutral_lm 9 frozen,0.09,0.045,0.01,0,-0.01,-0.045,-0.09`, `charged N frozen,0.09,0.03,0.01` (N = 6, 7, 8), `finite N` (N = 6, 7); `pinned_flow.py ising_pinned_ref 6,7,8,9,10,11,12` | `flow/pin_branches_*`, `flow/ising_pinned_ref.json` |
 | entropic and wall thresholds of an ordered line at large N, at leading order and with the entropy of order N^0 (Tables 8, 20) | `pinned_entropy.py entropy_window`, `pinned_det trace 1600 1600 160 160`, `twisted_det trace alpha 1000 1000 120 120` (alpha = 0, 0.1, …, 0.5), `twisted_summary` | `analytic/pinned_entropy/entropy_window.json`, `largeN/pinned_det_*`, `largeN/twisted_det_*` |
 
 `halftwist_pinning.py` asks whether the pinned partial twist survives at half twist at large N (paper, App. E.7). At
@@ -215,8 +216,12 @@ results unchanged, in about 12 minutes (719 s measured, peak memory 1.1 GB), mos
 times; rerun them one at a time as listed above (about 20 s each) and compare with the values given there.
 
 `pinned_flow.py` follows the pinned O(3) half-twist along the easy-plane flow and divides each quantity by the pinned
-O(2) monodromy line at the same N_m; `report` runs the gate, which sends the O(2) model through the same code and
-reproduces that line to all printed digits. `pinned_entropy.py` sets the entropy released by pinning, at leading order
+O(2) monodromy line at the same N_m. Its steps `pin_branches` and `ising_pinned_ref` follow the same charged pin and a
+pin on the untwisted component phi_3 along both branches, with the pinned line of the Ising model as an independent
+realization of the easy-axis endpoint; 'frozen' in a g list is the frozen easy-axis limit g = 3. `report` runs two
+gates: the O(2) model sent through the pinned-flow code reproduces the pinned O(2) line to all printed digits, and the
+phi_3 pin at the O(3) point reproduces the spectator-pinning energies of `02_rg_flow/easy_axis.py` to 1e-15.
+`pinned_entropy.py` sets the entropy released by pinning, at leading order
 and at order N^0, against the leading wall threshold. Its `report` reruns `entropy_window` (about 5 minutes) and
 `twisted_summary`, which reads the stored regulated traces; the traces themselves take 10 minutes (`pinned_det`) to an
 hour (`twisted_det`, per twist), and their (lam, mode) tables are rebuilt into `04_pinned_lines/pinned_entropy_files/`,
@@ -246,6 +251,12 @@ Representative values:
 - **Pinned flow.** At the easy-plane endpoint g = -0.09 the pinned O(3) line matches the pinned O(2) monodromy line at
   N_m = 6–8: C^HQ to 0.03% and the wall to 0.5%. At g = 0 the spectator raises the wall by 2.8, 4.1 and 5.2%. Keeping the
   local potential or reweighting the second pin bilinear moves the endpoint ratios by at most 0.1%.
+- **Pins along the two branches.** In the frozen easy-axis limit the phi_3-pinned half-twist has wall 0.750–0.755 and
+  lowest level 1.534–1.543 at N_m = 6–9, against 0.774–0.783 and 1.572–1.587 for the pinned line of the Ising model; the
+  ratio of the two, which does not depend on the unit, is 0.489 against 0.493 at N_m = 8. The twist changes this wall by
+  0.0016–0.0033 at g = 0 and by nothing in the frozen limit. On the easy plane at g = -0.09 the phi_3-pinned wall falls as
+  0.139, 0.095, 0.067, 0.048 at N_m = 6–9; on the easy axis the charged pin's wall falls to 0.043 in the frozen limit at
+  N_m = 8, and its Ward matrix element vanishes.
 - **Entropy against walls.** The entropy released by pinning at order N^0 is +0.0294, +0.0255, +0.0131, -0.0092,
   -0.0399 and -0.0549 at alpha = 0, 0.1, …, 0.5 (log g_pin = -0.153673 N - 0.0294 at alpha = 0). It moves the entropic
   threshold from 4.51 to 4.32 at alpha = 0 and from 14.59 to 15.75 at alpha = 1/2, above the leading wall threshold
@@ -257,7 +268,7 @@ Representative values:
 |---|---|---|
 | twisted bands at I = 2, 3, 4 | `fuzzy_s4.py twisted_band I K`, `save_band I 4 nsave` | `s4d/band_I*.log` |
 | interaction terms of models A and B, the I = 2 coupling map | `fuzzy_s4.py build_I ...`, `build_I3 i3A.json`, `design` | `terms_*.pkl` in `s4d_files/`, from the couplings `s4d/i3A.json`, `s4d/i3B.json`, `s4d/i4A.json`, `s4d/designB1c_I2*.json` |
-| bulk scans and defect levels by DMRG (Table 21) | `fuzzy_s4.py bulk_scan ...`, `defect_dmrg ...`, `fig_curves`, `lpar_measure ...`, `par_spin2 dmrg ...` | `s4d/bulkscan/*`, `s4d/defdmrg/*`, `s4d/note/*_points.json`, `s4d/lpar/*` |
+| bulk scans and defect levels by DMRG (Table 22) | `fuzzy_s4.py bulk_scan ...`, `defect_dmrg ...`, `fig_curves`, `lpar_measure ...`, `par_spin2 dmrg ...` | `s4d/bulkscan/*`, `s4d/defdmrg/*`, `s4d/note/*_points.json`, `s4d/lpar/*` |
 | exact correlator, overlaps, equal-time correlator, tilt Ward identity | `fuzzy_s4.py corr5d exact\|run\|dmrg ...`, `core5d ...`, `ward5d ...`, `ward5d_dmrg ...` | `s4d/lpar/*_corr5d.json`, `*_core5d.json`, `*_ward5d.json` |
 
 The five-dimensional results are not included in this repository. The steps write them under the names in the last
@@ -266,7 +277,7 @@ column, and `fuzzy_s4.py report` needs them; `fig_curves` also reads the I = 2 f
 
 Representative values:
 
-- **Table 21.** With the displacement candidate at four, I = 4 model A at h = 6 gives psi_1/2 = 2.018, psi_3/2 = 3.005,
+- **Table 22.** With the displacement candidate at four, I = 4 model A at h = 6 gives psi_1/2 = 2.018, psi_3/2 = 3.005,
   the s_par = 1 descendant 3.374 and the s_par = 2 candidate 4.999 (L_par^2 = 6.045), against the free 2, 3, 3, 4.
 - **Normalizations.** At I = 3, b_3/2^2/b_1/2^2 = 0.78 against the exact 4/3. The tilt carries 3.8%, 19% and 11% of its
   exact weight on the displacement family at I = 2, 3, 4.
