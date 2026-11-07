@@ -1,12 +1,12 @@
 """What do the epsilon expansion and large N predict for the junction of pinned lines?
 
 The shape factor r = Delta_j(pi)/2 C_tilt at one loop, 1 + (6 zeta(3)/pi^2) eps (eq:roneloop), and at two loops
-(eq:rtwoloop; Table 4): the two-vertex tree, the one-loop determinant around the pinned profile and the classical cubic
+(eq:rtwoloop, eq:junctionr2assembly; Table 16): the two-vertex tree, the one-loop determinant around the pinned profile and the classical cubic
 term, assembled in minimal subtraction. Independently of every graph, the junction at large N is a classical saddle on
 S^1 x H^2 (r_inf = 1.551, Delta_{+-} = 0.276 N), and its continuation to d = 4 - eps reproduces the two-loop coefficient
-at N = infinity (paper, Sec. 5.1 and App. E, "The shape factor at two loops" and "The junction at large N").
+at N = infinity (paper, Sec. 5.2 and App. E.5-E.6, "The shape factor at two loops" and "The junction at large N").
 
-The d -> 2 sigma-model wall (eq:walld2) and the Kosterlitz-Thouless anchor of Table 7 are closed forms in the text.
+The d -> 2 sigma-model wall (eq:walld2) and the Kosterlitz-Thouless anchor of Table 15 are closed forms in the text.
 
 usage: python junction_theory.py <step> [args]      (python junction_theory.py help lists the steps)
 """

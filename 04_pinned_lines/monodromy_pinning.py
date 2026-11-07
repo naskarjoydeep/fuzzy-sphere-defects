@@ -1,12 +1,12 @@
 """Where does pinning a charged mode of the O(2) monodromy lead, and how does the twist change its walls?
 
 The coupling h_pin int (psi_s + psi_s^dagger) on the O(2) monodromy line (eq:monopinaction) starts a line flow. At weak
-coupling the two real components of the doublet shift in the ratio 3:1 predicted for a single complex coupling (Table 14,
+coupling the two real components of the doublet shift in the ratio 3:1 predicted for a single complex coupling (Table 17,
 the time-reversal-even pin at h_p = 0.4, ED and DMRG to N_m = 12). At strong coupling (h_pin = 1000) the endpoint has a
 tilt at the protected value for alpha <= 0.3, a finite stiffness and pin-independent levels, and its junctions give the
-twist dependence of the stiffness, shape factor and wall (Tables 15 and 8; the alpha = 0 line with the same pin is the
-reference). The large-N saddles with every component twisted (Table 16) and with one twisted pair complete the comparison
-(paper, Sec. 5.3 and App. E, "Pinning a charged mode of the monodromy").
+twist dependence of the stiffness, shape factor and wall (Tables 4 and 18-20; the alpha = 0 line with the same pin is the
+reference). The large-N saddles with every component twisted (Table 21) and with one twisted pair complete the comparison
+(paper, Sec. 5.3 and App. E.7, "Pinning a charged mode of the monodromy").
 
 The ED runs take seconds to minutes and the DMRG runs 0.3-2 hours; their outputs are stored. The report rebuilds the table
 of continuum extrapolations from them.

@@ -2,10 +2,10 @@
 
 Pinning the order parameter at the two poles with directions at an internal angle eta creates a junction on a straight
 line; at eta = pi it is the domain wall between opposite pinnings, whose dimension Delta_{+-} decides whether the
-candidate ordered line is stable (paper, Sec. 5.1-5.2 and App. E). The steps are the exact-diagonalization and DMRG angle
+candidate ordered line is stable (paper, Sec. 5.2 and App. E). The steps are the exact-diagonalization and DMRG angle
 scans of the vector O(2), O(3), O(4) models and the spin-one O(2) regulator, the O(4) walls at N_m = 10, 11, and the
-audit pipeline that turns them into the shape factor, the measured walls and their extrapolations (Tables 4, 6, 10, 11,
-eq:wallpredict; Figs. 4 and 10).
+audit pipeline that turns them into the shape factor, the measured walls and their extrapolations (Tables 3, 11-14 and
+16, eq:wallpredict; Figs. 5, 10 and 11).
 
 The ED scans take seconds to an hour and the DMRG scans 1-31 hours; their outputs are stored. The report reruns the audit.
 

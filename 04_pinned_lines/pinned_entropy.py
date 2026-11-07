@@ -1,15 +1,15 @@
 """Can an ordered line of pinned monodromy lines disorder into the unpinned line? Walls against entropy at large N.
 
 An ordered line D_+ (+) D_- has g = 2 g_pin. By the g-theorem the unpinned monodromy line can flow into it only if
-log g_u - log g_pin > log 2, and its walls are relevant where Delta_+- < 1 (paper, Sec. 5.4, Table 8, and App. E.8,
-Table 20). At large N, with every component twisted in complex pairs, the entropy released by pinning is
+log g_u - log g_pin > log 2, and its walls are relevant where Delta_+- < 1 (paper, Sec. 5.4, Fig. 6, and App. E.8,
+Tables 22 and 23). At large N, with every component twisted in complex pairs, the entropy released by pinning is
 (N/2) Delta(alpha) + Delta^(1)(alpha) + O(1/N):
   entropy_window   the leading coefficient Delta(alpha), from the coincident deficit A_alpha(varsigma), and the leading
                    entropic and wall thresholds;
   pinned_det       the term of order N^0 at alpha = 0: the sigma fluctuation determinant of the ordinary pinned line,
                    with the mixing of sigma and the condensate;
   twisted_det      the same determinant on the unpinned and on the pinned line at alpha > 0;
-  twisted_summary  Delta^(1) at alpha = 0-0.5 and the next-order entropic thresholds of Table 8.
+  twisted_summary  Delta^(1) at alpha = 0-0.5 and the next-order entropic thresholds of Table 22.
 A trace takes about 10 minutes (pinned_det) to an hour (twisted_det, per alpha). Their regulated sums are stored; their
 (lam, mode) tables are rebuilt into pinned_entropy_files/, which git ignores, and no other step reads them.
 

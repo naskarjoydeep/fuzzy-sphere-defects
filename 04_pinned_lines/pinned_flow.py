@@ -1,7 +1,7 @@
 """Does pinning commute with the bulk flows, and which pin survives which branch?
 
 Section pinned_flow: the pinned O(3) half-twist, with the time-reversal-even pin of monodromy_pinning.py (h_pin = 1000,
-local potential subtracted), is followed along the tuned easy-plane trajectory of 02_rg_flow (paper, Sec. 5.1, Fig. 4).
+local potential subtracted), is followed along the tuned easy-plane trajectory of 02_rg_flow (paper, Sec. 5.1, Fig. 4(c,d)).
 Each quantity is compared with the pinned O(2) monodromy line at the same N_m, stored as twist/pin_even_o2wf_N*_a0.5.json:
   gate N             runs the O(2) model through the same code and reproduces that line;
   run N g1,g2,...    the tilt, Ward and angle stiffness, shape factor and wall of the pinned O(3) line along the flow;
@@ -9,7 +9,7 @@ Each quantity is compared with the pinned O(2) monodromy line at the same N_m, s
                      0.7 and 1.4, in both models.
 The paper uses N_m = 6-8, by exact diagonalization (N_m = 8 needs about 2.3 GB).
 
-Sections pin_branches and ising_pinned_ref (paper, App. E.9, Table 21, Fig. 1): the same charged pin and a neutral pin on
+Sections pin_branches and ising_pinned_ref (paper, App. E.9, Table 24, Figs. 1 and 4(a,b)): the same charged pin and a neutral pin on
 the untwisted component phi_3 (eq:pin3), followed along both branches. On the easy-axis branch the phi_3 pin ends on the
 pinned Ising line, which ising_pinned_ref realizes independently in the Ising model; the charged pin decouples there, and
 the phi_3 pin decouples on the easy-plane branch. Steps: pin_branches gate N, neutral N g1,..., neutral_lm 9 g1,...
