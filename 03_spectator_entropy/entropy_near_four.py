@@ -3,7 +3,7 @@
 The partial twist (n_t twisted complex planes and N - 2 n_t untwisted spectators) in d = 4 - eps, through O(eps^2).
 The steps give the first order (eq:decoupleeps), the spectator s = 0 channel and its Hartree resummation (eq:spgap,
 eq:Fsp, eps_c, the imaginary eps^{3/2} term), and the analytic O(eps^2) pieces in MS-bar (coupling counterterm, cactus
-diagrams, melon), assembled into the paper's Table 3 and Table 13 (Sec. 4.3 and App. D, "The entropy near four
+diagrams, melon), assembled into the paper's Tables 9 and 10 (Sec. 4.3 and App. D.9, "The entropy near four
 dimensions"). Every step is an mpmath/sympy script whose printed output is stored under its research path, .log.
 
 usage: python entropy_near_four.py <step>      (python entropy_near_four.py help lists the steps)

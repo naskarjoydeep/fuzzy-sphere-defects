@@ -2,7 +2,7 @@
 
 The O(N) model at large N with one twisted complex component and N - 2 untwisted spectators, on S^1 x H^2 (paper,
 Sec. 4 and App. D). The steps tabulate the fluctuation trace sector by sector and sum it with rotationally symmetric
-cutoffs (Table 3(a), Figs. 3 and 9); check the closed form c = (64/3 pi) h_free (eq:cresult) and the uniformity of the
+cutoffs (Table 9(a), Fig. 3(b)); check the closed form c = (64/3 pi) h_free (eq:cresult) and the uniformity of the
 tail; show numerically and symbolically that every fixed circle sector vanishes ("The fixed-sector identity"); reproduce
 the full twist of Giombi et al.; and test the choice of regulator against dimensional regularization near d = 4 and at
 d = 7/2 ("The analytic formula").
@@ -469,9 +469,9 @@ Steps: "alpha a kmax" is the per-mode check (alpha.py a 2000, logged as largeN/c
 
 @section
 def largeN_traces():
-    """The direct large-N traces at six angles (Table 3(a), "direct trace" row; Fig. 3(b)): Gaussian-cutoff sums of the
+    """The direct large-N traces at six angles (Table 9(a), "direct trace" row; Fig. 3(b)): Gaussian-cutoff sums of the
 tabulated integrand, extrapolated in 1/p_max. This is the large-N block of
-fun/paper_2026_10_24_physics/figure_sources/revise_figures.py, which draws Fig. 3(b) from the same numbers.
+fun/paper_2026_10_24_physics/figure_sources/revise_figures.py; the current Fig. 3(b) (curate_figures.py) plots the same numbers.
 """
     import numpy as np
     REGS={'Gaussian':lambda x:np.exp(-x),'Lorentzian':lambda x:(1+x)**-3}

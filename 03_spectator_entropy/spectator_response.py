@@ -2,7 +2,7 @@
 
 At large N the gap equation forces the spectators' lowest line mode onto its singular branch (eq:sqrta), which lowers
 its dimension; the neutral line operators are then the zeros of the varsigma kernel K_0 (eq:K0singlet), not the
-spectator double trace. The steps compute the lowest neutral line operator (Table 12) and check it independently from
+spectator double trace. The steps compute the lowest neutral line operator (Table 8) and check it independently from
 the paper's equations (paper, Sec. 4.2 and App. D, "The neutral line spectrum of a partial twist").
 
 The lattice column of Table 2 (spectator line mode 0.41, lowest neutral operator 1.23, local potential subtracted) is the
