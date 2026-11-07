@@ -4,8 +4,10 @@ A codimension-two defect in five dimensions meets the radial S^4 on a great S^2.
 around it by trial sections w^(1/2) x^m and wbar^(1/2) x^m of the Yang-monopole bundle; a separated band of the angular
 form in this twisted trial space is the orbital projector (6, 14 and 26 orbitals at I = 2, 3, 4), and local interactions
 projected onto it give the many-body Hamiltonian (paper, Sec. 6 and App. F). The tests are against the free 5d half-twist:
-the spectrum with the displacement fixed at four (Table 17), the parallel SO(3) spin of the descendants, the bulk-to-defect
-overlaps, the equal-time defect correlator and the tilt Ward identity.
+the spectrum with the displacement fixed at four (Table 25), the parallel SO(3) spin of the descendants, the bulk-to-defect
+overlaps, the equal-time defect correlator and the tilt Ward identity (App. F.4). The density weights of the projected
+lowest Landau level test its spatial resolution (App. F.3, audit_s4d), and the first moment of the energy density along
+the defect tests the descendant tower with a parallel conformal generator (App. F.5, Table 26, lambda5 and audit_s4d).
 
 The bands (save_band) and interaction terms (build_I, build_I3) are large files rather than stored results; the steps
 rebuild them into s4d_files/ next to this file, where the other steps read them. The DMRG steps take hours to days; their
@@ -2660,14 +2662,14 @@ Run as ward5d_dmrg terms_i3A.pkl 4.5 600 14 10 and ward5d_dmrg terms_i4A.pkl 5.6
 
 @section
 def s4_summary():
-    """The numbers of Sec. 6, Appendix F and Table 17, from the stored results (written for this package; it reads stored
+    """The numbers of Sec. 6, Appendix F and Table 25, from the stored results (written for this package; it reads stored
 results and recomputes nothing).
 - Twisted bands at I = 2, 3, 4 (s4d/band_I*.log, from save_band): orbitals kept, band width and gap to the next
   variational level. Levels are measured from the untwisted Landau energy I^2/2 + 2I, and the band ends at the first
   gap larger than one, the rule of the research note's number generator.
 - The map from the six I = 2 local couplings to the six bulk two-particle channel energies (design.OPS): its singular
   values, its rank and the combination it annihilates.
-- Table 17. The field h_c where the bulk ratio Delta_phi/(Delta_dphi - Delta_phi) is 3/2, and the D-calibrated defect
+- Table 25. The field h_c where the bulk ratio Delta_phi/(Delta_dphi - Delta_phi) is 3/2, and the D-calibrated defect
   levels there, interpolated linearly in h between the DMRG fields (s4d/note/i*_points.json, from fig_curves). Then the
   levels measured directly at the table's fields (s4d/lpar/<model>_h<h>_chi800*.json, from lpar_measure), the
   parallel-Casimir spin-two search (..._pen20*.json, from par_spin2) and the I = 4 spin-three state.
@@ -2785,8 +2787,427 @@ results and recomputes nothing).
     return namespace(locals(), globals())
 
 
-STEPS = {'twisted_band': twisted_band, 'save_band': save_band, 'build_I': build_I, 'build_I3': build_I3, 'design': design, 'bulk_scan': bulk_scan, 'defect_dmrg': defect_dmrg, 'fig_curves': fig_curves, 'lpar': lpar, 'lpar_measure': lpar_measure, 'par_spin2': par_spin2, 'corr5d': corr5d, 'core5d': core5d, 'ward5d': ward5d, 'ward5d_dmrg': ward5d_dmrg, 's4_summary': s4_summary}
-REPORT = [('corr5d', 'exact'), ('s4_summary',)]
+@section
+def lambda5():
+    """The parallel conformal generator Lambda_5 = P_5 + K_5 on the fuzzy S^4, and the descendant Ward test.
+
+Physics. The defect worldvolume meets each time slice in the S^2 {x3 = x4 = 0}. The parallel conformal group SO(4,1)
+contains P_a + K_a for the parallel directions a = 1, 2, 5. On the regulated sphere (Fardelli-Fitzpatrick-Katz)
+    Lambda_5 = int dOmega x_5 H(x) = c (P_5 + K_5) + (irrelevant corrections),
+with H(x) the Hamiltonian density. x_5 is invariant under both Cartan rotations X_12 (P) and X_34 (T), so Lambda_5
+keeps every sector label (P, T, z2) and its matrix elements are torus-invariant integrands (exact on the 2d grid).
+For a defect primary psi of dimension D, K_5|psi> = 0 and Lambda_5|psi> = c P_5|psi>: ALL of its weight off psi lies
+on ONE state, d_5 psi at D + 1 (parallel spin 1, l_z = 0), with |c P_5 psi|^2 = 2 D c^2. Normalization-free tests:
+  (T1) concentration: the largest single-state share of ||Lambda psi||^2 - |<psi|Lambda|psi>|^2 tends to 1;
+  (T2) that state's D-calibrated level is D_psi + 1 (the level that quantum numbers alone labelled d psi);
+  (T3) ratios of the absolute weights of two primaries equal the ratios of their dimensions (same c), e.g.
+       W(psi)/W(D) = D_psi/D_D (2/4 for the free half-twist) and W_bulk(phi)/W(psi) = D_phi/D_psi (3/4).
+  (T4) the vacua are invariant: Lambda_5|0> has no weight off |0>.
+Construction. H(x) is the normal-ordered local interaction of build_I.terms_for (contact[L], cas[L], density
+Laplacian in its gradient form) plus the field -h(n_+ - n_-); Lambda_5 inserts x_5 into the grid weights. The gradient
+form fixes the total-derivative ambiguity of the Laplacian density (a choice, as in twist/lambda_z.py). The weighted
+field is one-body but not diagonal; it is folded into two-body terms with c+_i c_j = sum_k c+_i c+_k c_k c_j/(N_e - 1),
+exact at fixed N_e (lpar.py's device), so the ED sector builder and the MPO builder take it unchanged (with h = 0).
+Gates. (G1) weight 1 reproduces the stored H terms and gives the identity Gram matrix; (G2) Lambda is real symmetric in
+every sector built; (G3) at I = 2, Lambda with weight 1 equals H in a sector (ED).
+usage: python lambda5.py gate terms_<tag>.pkl config.json
+       python lambda5.py ed terms_<tag>.pkl terms_<tag>_bulk.pkl config.json h     -> lpar/<tag>_h<h>_lambda5.json
+
+Paper, App. F.5 (Eq. s4generator, Table 26). Run as lambda5 gate terms_designB1c_I2.pkl designB1c_I2.json, lambda5 ed terms_designB1c_I2.pkl terms_designB1c_I2_bulk.pkl designB1c_I2.json 8.3, lambda5 dmrg terms_designB1c_I2.pkl designB1c_I2.json 8.3 200 10 7 (the DMRG gate against ed) and lambda5 dmrg terms_i3A.pkl i3A.json 4.5 400 10 10 1 (the I = 3 row; about 20 minutes and 6.4 GB).
+"""
+    import os
+    import sys
+    import json
+    import time
+    import pickle
+    import numpy as np
+    HERE = 's4d'
+    sys.path.insert(0, HERE)
+    geom = globals()['geom']()   # was: import geom
+    inter = globals()['inter']()   # was: import inter
+    lpar = globals()['lpar']()   # was: import lpar
+
+
+    def couplings(cfg):
+        c = cfg['couplings']
+        U = {int(n[1:]): v for n, v in c.items() if n.startswith('c') and abs(v) > 0}
+        K = {int(n[1:]): v for n, v in c.items() if n.startswith('k') and abs(v) > 0}
+        return U, K, c.get('d1', 0.0)
+
+
+    def two_body(g, orbs, I, cfg, wt):
+        """Normal-ordered interaction terms with grid weight W * wt (wt = 1 reproduces build_I.terms_for)."""
+        U, K, d1 = couplings(cfg)
+        W = g.W * wt
+        t = inter.pair_terms(orbs, I, W, U, K)
+        if abs(d1) > 0:
+            t = inter.merge(t, inter.density_terms(orbs, W, 0.0, d1))
+        tl, bad = inter.to_list(t)
+        return [x for x in tl if x[0] != x[1] and x[2] != x[3]], bad
+
+
+    def gram(g, orbs, wt):
+        """B[i, j] = int wt s_i^dag s_j for the same flavour and Cartan charges (fibre-traced)."""
+        n = len(orbs)
+        B = np.zeros((n, n), complex)
+        W = (g.W * wt)[:, None]
+        for i, a in enumerate(orbs):
+            for j, b in enumerate(orbs):
+                if a['f'] == b['f'] and abs(a['P'] - b['P']) < 1e-9 and abs(a['T'] - b['T']) < 1e-9:
+                    B[i, j] = np.sum(W * a['s'].conj() * b['s'])
+        return B
+
+
+    def fold_field(orbs, B, h, Ne, tol=1e-12):
+        """-h sum (B^+_ij c+_i c_j) + h sum (B^-_ij c+_i c_j) as two-body terms at fixed N_e."""
+        n = len(orbs)
+        out = []
+        for i in range(n):
+            for j in range(n):
+                b = B[i, j]
+                if abs(b) < tol:
+                    continue
+                v = (-h if orbs[i]['f'] == 0 else h) * b / (Ne - 1)
+                for k in range(n):
+                    if k != i and k != j:
+                        out.append((i, k, k, j, v))
+        return out
+
+
+    def lambda_terms(g, orbs, I, cfg, h, Ne, wt):
+        tb, bad = two_body(g, orbs, I, cfg, wt)
+        B = gram(g, orbs, wt)
+        assert np.max(np.abs(B.imag)) < 1e-10
+        return tb + [(a, b, c, d, float(np.real(v))) for (a, b, c, d, v) in fold_field(orbs, B.real, h, Ne)], bad
+
+
+    def bulk_orbitals(I):
+        g = geom.Grid(I, 40, 40)
+        return g, inter.lll_orbitals(g, 0) + inter.lll_orbitals(g, 1)
+
+
+    def as_dict(tl):
+        out = {}
+        for (a, b, c, d, v) in tl:
+            out[(a, b, c, d)] = out.get((a, b, c, d), 0.0) + v
+        return out
+
+
+    def gate(pkl, cfgf):
+        d = pickle.load(open(pkl, 'rb'))
+        cfg = store.get(cfgf)
+        g, orbs = lpar.orbitals(d)
+        I = g.I
+        t0 = time.time()
+        tb, bad = two_body(g, orbs, I, cfg, np.ones_like(g.W))
+        ref, new = as_dict(d['def_terms']), as_dict(tb)
+        keys = set(ref) | set(new)
+        diff = max(abs(ref.get(k, 0.0) - new.get(k, 0.0)) for k in keys)
+        scale = max(abs(v) for v in ref.values())
+        B = gram(g, orbs, np.ones_like(g.W))
+        print(f'G1 I={I}: {len(tb)} terms vs stored {len(ref)}; max |diff| {diff:.2e} (scale {scale:.2e}); imag {bad:.1e}; '
+              f'Gram - 1: {np.max(np.abs(B - np.eye(len(orbs)))):.2e}  [{time.time() - t0:.0f}s]', flush=True)
+        tx, badx = two_body(g, orbs, I, cfg, g.x5)
+        print(f'x5-weighted: {len(tx)} terms, imag {badx:.1e}; x5 Gram max offdiag '
+              f'{np.max(np.abs(gram(g, orbs, g.x5) - np.diag(np.diag(gram(g, orbs, g.x5))))):.3f}', flush=True)
+
+
+    def ed(pkl, bulkpkl, cfgf, h, nfull=4000):
+        mb = globals()['mb']()   # was: import mb
+        d = pickle.load(open(pkl, 'rb')); db = pickle.load(open(bulkpkl, 'rb'))
+        cfg = store.get(cfgf)
+        tag = os.path.basename(pkl)[len('terms_'):-len('.pkl')]
+        g, orbs = lpar.orbitals(d)
+        I = g.I
+        Ne = sum(1 for o in orbs if o['f'] == 0)
+        res = dict(tag=tag, I=I, h=h, Ne=Ne, sectors={})
+
+        def analyse(label, orbsx, Hterms, Lterms, Lterms1, sec, ref):
+            H, Bs = mb.sector(orbsx, Hterms, h, Ne, *sec)
+            L, _ = mb.sector(orbsx, Lterms, 0.0, Ne, *sec)
+            L1, _ = mb.sector(orbsx, Lterms1, 0.0, Ne, *sec)
+            Hd = H.toarray(); Ld = L.toarray()
+            g3 = np.max(np.abs(L1.toarray() - Hd))
+            g2 = np.max(np.abs(Ld - Ld.conj().T))
+            e, v = np.linalg.eigh(Hd)
+            psi = v[:, 0]
+            lv = Ld @ psi
+            tot = float(np.vdot(lv, lv).real - abs(np.vdot(psi, lv)) ** 2)
+            amp = v.conj().T @ lv
+            w = np.abs(amp) ** 2
+            w[0] = 0.0
+            top = np.argsort(-w)[:6]
+            rows = [dict(n=int(n), E=float(e[n]), w=float(w[n]), share=float(w[n] / tot) if tot > 0 else 0.0) for n in top]
+            rec = dict(sector=list(sec), dim=int(H.shape[0]), E=e[:12].tolist(), total=tot, diag=float(np.vdot(psi, lv).real),
+                       top=rows, G2_herm=float(g2), G3_weight1_minus_H=float(g3))
+            res['sectors'][label] = rec
+            return rec
+
+        t0 = time.time()
+        one = np.ones_like(g.W)
+        Hd_terms = d['def_terms']
+        Ld_terms, bad = lambda_terms(g, orbs, I, cfg, h, Ne, g.x5)
+        L1_terms, _ = lambda_terms(g, orbs, I, cfg, h, Ne, one)
+        print(f'defect Lambda_5: {len(Ld_terms)} terms (imag {bad:.1e}) [{time.time() - t0:.0f}s]', flush=True)
+        for label, sec in (('defect_vac', (0, 0.0, 1)), ('psi', (0, 0.5, -1)), ('D', (0, 1.0, 1))):
+            analyse(label, orbs, Hd_terms, Ld_terms, L1_terms, sec, None)
+        gb, ob = bulk_orbitals(I)
+        Lb_terms, badb = lambda_terms(gb, ob, I, cfg, h, Ne, gb.x5)
+        L1b_terms, _ = lambda_terms(gb, ob, I, cfg, h, Ne, np.ones_like(gb.W))
+        for label, sec in (('bulk_vac', (0, 0.0, 1)), ('phi', (0, 0.0, -1))):
+            analyse(label, ob, db['bulk_terms'], Lb_terms, L1b_terms, sec, None)
+        S = res['sectors']
+        E0d, ED = S['defect_vac']['E'][0], S['D']['E'][0]
+        cal = lambda E: 4 * (E - E0d) / (ED - E0d)
+        E0b, Ephi = S['bulk_vac']['E'][0], S['phi']['E'][0]
+        calb = lambda E: 1.5 * (E - E0b) / (Ephi - E0b)
+        for k in ('defect_vac', 'psi', 'D'):
+            for r in S[k]['top']:
+                r['Dcal'] = cal(r['E'])
+            S[k]['Dcal0'] = cal(S[k]['E'][0])
+        for k in ('bulk_vac', 'phi'):
+            for r in S[k]['top']:
+                r['phical'] = calb(r['E'])
+        for k, rec in S.items():
+            lev = 'Dcal' if k in ('defect_vac', 'psi', 'D') else 'phical'
+            print(f"{k:10s} dim {rec['dim']:5d}  G2 {rec['G2_herm']:.1e}  G3 {rec['G3_weight1_minus_H']:.1e}  "
+                  f"total off-diag weight {rec['total']:.4e}", flush=True)
+            print('    ' + '  '.join(f"[{r[lev]:.3f}: {r['share']:.3f}]" for r in rec['top'][:5]), flush=True)
+        Dpsi, DD = S['psi']['Dcal0'], 4.0
+        Wpsi, WD, Wphi = S['psi']['top'][0]['w'], S['D']['top'][0]['w'], S['phi']['top'][0]['w']
+        res['ratios'] = dict(Wpsi_over_WD=Wpsi / WD, Dpsi_over_DD=Dpsi / DD, Wphi_over_Wpsi=Wphi / Wpsi, Dphi_over_Dpsi=1.5 / Dpsi)
+        print('ratios: ' + json.dumps({k: round(v, 4) for k, v in res['ratios'].items()}), flush=True)
+        pass   # was os.makedirs(...): the store needs no output directory
+        fn = os.path.join(HERE, 'lpar', f'{tag}_h{h:.4f}_lambda5.json')
+        store.put(fn, res)
+        print(f'-> {fn} [{time.time() - t0:.0f}s]')
+
+
+    def states(model, order, occ, n, chi, sweeps):
+        s4dmrg = globals()['s4dmrg']()   # was: import s4dmrg
+        psis, Es = [], []
+        for _ in range(n):
+            E, psi = s4dmrg.run(model, order, occ, chi, sweeps, orthogonal_to=psis or None)
+            psis.append(psi); Es.append(float(E))
+        o = np.argsort(Es)
+        return [Es[i] for i in o], [psis[i] for i in o]
+
+
+    def dmrg(pkl, cfgf, h, chi, sweeps, n, nD=1):
+        """The psi test (and, with nD > 1, the D test) by DMRG. Total off-psi weight = Lambda.variance(psi), exact."""
+        s4dmrg = globals()['s4dmrg']()   # was: import s4dmrg
+        from tenpy.networks.mpo import MPOEnvironment
+        t0 = time.time()
+        d = pickle.load(open(pkl, 'rb')); cfg = store.get(cfgf)
+        tag = os.path.basename(pkl)[len('terms_'):-len('.pkl')]
+        g, orbs_w = lpar.orbitals(d)
+        I = g.I
+        orbs = [dict(o, lat=l) for o, l in zip(d['def_orbs'], d['def_lat'])]
+        Ne = sum(1 for o in orbs if o['f'] == 0)
+        Lt, bad = lambda_terms(g, orbs_w, I, cfg, h, Ne, g.x5)
+        model, order = s4dmrg.build(orbs, d['def_terms'], h)
+        lmodel, lorder = s4dmrg.build(orbs, Lt, 0.0)
+        assert list(order) == list(lorder)
+        print(f'{tag} h={h} chi={chi}: {len(orbs)} modes, Lambda_5 {len(Lt)} terms (imag {bad:.1e}), models [{time.time() - t0:.0f}s]',
+              flush=True)
+        occ = lambda P, T, z: s4dmrg.best_product_state(orbs, d['def_terms'], h, Ne, P, T, z)
+        E0 = states(model, order, occ(0, 0.0, 1), 1, chi, sweeps)[0][0]
+        out = dict(pkl=os.path.basename(pkl), h=h, chi=chi, sweeps=sweeps, E0=E0, tests={})
+
+        def test(label, sec, k):
+            Es, S = states(model, order, occ(*sec), k, chi, sweeps)
+            amp = [complex(MPOEnvironment(S[i], lmodel.H_MPO, S[0]).full_contraction(0)) for i in range(k)]
+            tot = float(np.real(lmodel.H_MPO.variance(S[0])))
+            w = np.abs(np.array(amp)) ** 2; w[0] = 0.0
+            out['tests'][label] = dict(sector=list(sec), E=Es, amp=[[a.real, a.imag] for a in amp], w=w.tolist(), total=tot)
+            print(f'  {label}: {k} states, total off-diagonal weight {tot:.4e}, captured {w.sum() / tot:.3f} [{time.time() - t0:.0f}s]',
+                  flush=True)
+            return Es
+
+        ED = test('D', (0, 1.0, 1), nD)[0]
+        test('psi', (0, 0.5, -1), n)
+        cal = lambda E: 4 * (E - E0) / (ED - E0)
+        for label, r in out['tests'].items():
+            r['Dcal'] = [cal(E) for E in r['E']]
+            r['share'] = [x / r['total'] for x in r['w']] if r['total'] > 0 else []
+            print(f'  {label}: ' + '  '.join(f'[{a:.3f}: {s:.3f}]' for a, s in zip(r['Dcal'], r['share'])), flush=True)
+        out['time'] = time.time() - t0
+        fn = os.path.join(HERE, 'lpar', f'{tag}_h{h:.4f}_chi{chi}_lambda5.json')
+        store.put(fn, out)
+        print(f'-> {fn} [{out["time"]:.0f}s]', flush=True)
+
+    def main():
+        a = sys.argv
+        if a[1] == 'gate':
+            gate(a[2], a[3])
+        elif a[1] == 'ed':
+            ed(a[2], a[3], a[4], float(a[5]))
+        elif a[1] == 'dmrg':
+            dmrg(a[2], a[3], float(a[4]), int(a[5]), int(a[6]), int(a[7]), int(a[8]) if len(a) > 8 else 1)
+
+    def cli(argv):
+        sys.argv = list(argv)
+        with fuzzy.logged('s4d/logs/lambda5_{args}.log'.replace('{args}', '_'.join(argv[1:]))):
+            main()
+    return namespace(locals(), globals())
+
+
+@section
+def audit_s4d():
+    """Independent small-cutoff checks; leave the production data and Hamiltonians untouched.
+
+Run with ~/anaconda3/envs/quantum/bin/python. Results are written beside this script.
+The optional density improvement is fixed on the I=2 defect vacuum only;
+the psi sector is an independent test, not part of that fit.
+
+Paper, App. F.2-F.5. harmonic_checks proves the density weights f_n of Eq. (s4densityweight) exactly at I = 2, 3, 4, 8 (App. F.3); saved_checks reads the bands and the lambda5 and defect_dmrg results (band multiplets, ED against DMRG at I = 2, the chi = 400 against chi = 800 levels at I = 3); improvement_test fits the vacuum-improved moment of Table 26 on the I = 2 defect vacuum and holds the psi and D sectors out; rotation_checks tests the parallel rotation algebra of the projected generators (App. F.2). Run as audit_s4d; saved_checks needs the results of save_band, lambda5 and defect_dmrg, which are not stored here.
+"""
+    from pathlib import Path
+    import json
+    import os
+    import pickle
+    import sys
+
+    import numpy as np
+    import sympy as sp
+    ROOT = Path('.')   # was the research folder s4d/: bands and terms are read from s4d_files/, results from the store
+
+
+    def harmonic_checks():
+        t = sp.symbols('t')
+        records = []
+        for I in (2, 3, 4, 8):
+            for n in range(min(I, 5) + 1):
+                poly = sp.Poly(sp.gegenbauer(n, sp.Rational(3, 2), 2*t-1), t)
+                terms = poly.terms()
+                norm = sp.integrate(6*t*(1-t)*poly.as_expr()**2, (t, 0, 1))
+                trace = 0
+                for k in range(I+1):
+                    mean = sum(c*sp.rf(k+2, p[0])/sp.rf(I+4, p[0]) for p, c in terms)
+                    trace += (k+1)*(I-k+1)*mean**2/norm
+                measured = sp.factor(trace/sp.binomial(I+3, 3))
+                exact = sp.factorial(I)*sp.factorial(I+3)/(sp.factorial(I-n)*sp.factorial(I+n+3))
+                assert measured == exact
+                records.append(dict(I=I, n=n, value=str(measured)))
+        return records
+
+
+    def saved_checks():
+        bands = []
+        for I, n in ((2, 6), (3, 14), (4, 26)):
+            b = np.load(ROOT / f'band_I{I}.npz')
+            energies = b['E']
+            assert np.all(np.diff(energies) > -1e-6)
+            multiplets = []
+            for t in np.unique(b['T'][:n]):
+                ps, counts = np.unique(np.round(b['P'][:n][abs(b['T'][:n]-t)<1e-7], 6), return_counts=True)
+                weights = dict(zip(ps, counts))
+                assert all(weights[p] == weights[-p] for p in weights)
+                for p in sorted(x for x in weights if x >= 0):
+                    multiplicity = int(weights[p]-weights.get(p+1, 0))
+                    assert multiplicity >= 0
+                    if multiplicity:
+                        multiplets.append(dict(T=float(t), ell=float(p), multiplicity=multiplicity))
+            assert round(sum((2*x['ell']+1)*x['multiplicity'] for x in multiplets)) == n
+            bands.append(dict(I=I, count=n, width=float(energies[n-1]-energies[0]),
+                              gap=float(energies[n]-energies[n-1]), multiplets=multiplets))
+        ed = store.get('lpar/designB1c_I2_h8.3000_lambda5.json')
+        dmrg2 = store.get('lpar/designB1c_I2_h8.3000_chi200_lambda5.json')
+        edpsi = ed['sectors']['psi']
+        check2 = dict(energy_max_error=float(np.max(np.abs(np.array(edpsi['E'][:7])-dmrg2['tests']['psi']['E']))),
+                      variance_relative_error=abs(dmrg2['tests']['psi']['total']/edpsi['total']-1),
+                      dominant_share_errors=[abs(dmrg2['tests']['psi']['share'][r['n']]-r['share']) for r in edpsi['top'][:2]])
+        dmrg3 = store.get('lpar/i3A_h4.5000_chi400_lambda5.json')
+        E800 = {}
+        for name, sector in [('vac','0_0.0_1'), ('psi','0_0.5_-1'), ('D','0_1.0_1'), ('first','1_0.5_-1')]:
+            E800[name] = store.get(f'defdmrg/i3A_h4.5000_chi800_{sector}.json')['E'][0]
+        scale = (E800['D']-E800['vac'])/4
+        check3 = dict(primary_400=dmrg3['tests']['psi']['Dcal'][0],
+                      first_400=dmrg3['tests']['psi']['Dcal'][1],
+                      primary_800=(E800['psi']-E800['vac'])/scale,
+                      first_800=(E800['first']-E800['vac'])/scale,
+                      largest_resolved_share=max(dmrg3['tests']['psi']['share']),
+                      captured_share=sum(dmrg3['tests']['psi']['share']),
+                      amplitude_convergence_available=False,
+                      displacement_descendants_computed=False)
+        return dict(bands=bands, ED_DMRG_I2=check2, I3=check3)
+
+
+    def improvement_test():
+        inter = globals()['inter']()   # was: import inter
+        lambda5 = globals()['lambda5']()   # was: import lambda5
+        lpar = globals()['lpar']()   # was: import lpar
+        mb = globals()['mb']()   # was: import mb
+        d = pickle.load(open(ROOT/'terms_designB1c_I2.pkl', 'rb'))
+        cfg = store.get('designB1c_I2.json')
+        h = 8.3
+        g, orbs = lpar.orbitals(d)
+        Ne = sum(o['f'] == 0 for o in orbs)
+        base, _ = lambda5.lambda_terms(g, orbs, 2, cfg, h, Ne, g.x5)
+        # These are x5 moments O5. Adding a*O5 to Lambda is realized by
+        # adding -(a/4)*Laplacian(O) to the energy density on the unit S4.
+        contact, _ = inter.to_list(inter.density_terms(orbs, g.W*g.x5, 1., 0.))
+        contact = [x for x in contact if x[0] != x[1] and x[2] != x[3]]
+        B = lambda5.gram(g, orbs, g.x5)
+        field = lambda5.fold_field(orbs, B, 1., Ne)
+        field = [(a,b,c,e,float(np.real(v))) for a,b,c,e,v in field]
+        records = {}
+        matrices = {}
+        for name, sec in [('vac',(0,0.,1)), ('psi',(0,.5,-1)), ('D',(0,1.,1))]:
+            H, basis = mb.sector(orbs, d['def_terms'], h, Ne, *sec)
+            e, v = np.linalg.eigh(H.toarray())
+            operators = [mb.sector(orbs, ts, 0., Ne, *sec)[0].toarray() for ts in (base, field, contact)]
+            for op in operators:
+                assert np.max(np.abs(op-op.T.conj())) < 1e-9
+            amplitudes = np.array([v.T.conj() @ op @ v[:,0] for op in operators])
+            amplitudes[:,0] = 0
+            matrices[name] = (e, amplitudes)
+        e, a = matrices['vac']
+        coeffs, _, rank, sing = np.linalg.lstsq(a[1:].T, -a[0], rcond=1e-12)
+        E0 = matrices['vac'][0][0]
+        gamma = (matrices['D'][0][0]-E0)/4
+        for name,(e,a) in matrices.items():
+            rec = {}
+            for label, amp in [('original',a[0]),('vacuum_fitted',a[0]+coeffs@a[1:])]:
+                w = abs(amp)**2
+                total = float(w.sum())
+                top = np.argsort(-w)[:4]
+                rec[label] = dict(total=total, levels=[dict(n=int(k), Dcal=float((e[k]-E0)/gamma),
+                                                          share=float(w[k]/total)) for k in top])
+            records[name] = rec
+        reference = store.get('lpar/designB1c_I2_h8.3000_lambda5.json')
+        for name in ('psi','D'):
+            assert abs(records[name]['original']['total']/reference['sectors'][name]['total']-1) < 1e-8
+        return dict(moment_coefficients=dict(field=float(np.real(coeffs[0])), contact=float(np.real(coeffs[1]))),
+                    fit_rank=int(rank), singular_values=sing.tolist(), sectors=records,
+                    scope='I=2 defect vacuum fit; psi and D held out; no Hamiltonian or saved production data changed')
+
+
+    def rotation_checks():
+        lpar = globals()['lpar']()   # was: import lpar
+        out = []
+        for I, tag in ((2, 'designB1c_I2'), (3, 'i3A'), (4, 'i4A')):
+            d = pickle.load(open(ROOT/f'terms_{tag}.pkl', 'rb'))
+            g, orbs = lpar.orbitals(d)
+            _, checks, _ = lpar.checks(g, orbs)
+            out.append(dict(I=I, checks={k:float(v) for k,v in checks.items()}))
+        return out
+
+    def main():
+        result = dict(harmonic_exact_checks=harmonic_checks(), saved_data=saved_checks())
+        print('Exact harmonic weights and saved-data checks passed.', flush=True)
+        result['density_improvement'] = improvement_test()
+        result['rotation_closure'] = rotation_checks()
+        store.put('checks_2026_11_07/checks.json', result)
+        print(json.dumps({k:v for k,v in result.items() if k != 'harmonic_exact_checks'}, indent=2))
+
+    def cli(argv):
+        main()
+    return namespace(locals(), globals())
+
+
+STEPS = {'twisted_band': twisted_band, 'save_band': save_band, 'build_I': build_I, 'build_I3': build_I3, 'design': design, 'bulk_scan': bulk_scan, 'defect_dmrg': defect_dmrg, 'fig_curves': fig_curves, 'lpar': lpar, 'lpar_measure': lpar_measure, 'par_spin2': par_spin2, 'corr5d': corr5d, 'core5d': core5d, 'ward5d': ward5d, 'ward5d_dmrg': ward5d_dmrg, 's4_summary': s4_summary, 'lambda5': lambda5, 'audit_s4d': audit_s4d}
+REPORT = [('corr5d', 'exact'), ('s4_summary',), ('audit_s4d',)]
 
 if __name__ == '__main__':
     _file = os.path.abspath(__file__)
