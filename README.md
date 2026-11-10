@@ -16,7 +16,7 @@ If you use this code or data, please cite:
 @article{Lee:2026xxx,
     author = "Lee, Kimyeong and Naskar, Joydeep",
     title = "{Monodromy Defects and Bulk Renormalization Group Flows on the Fuzzy Sphere}",
-    eprint = "XXXX.XXXXX",
+    eprint = "2611.10815",
     archivePrefix = "arXiv",
     primaryClass = "hep-th",
     year = "2026"
