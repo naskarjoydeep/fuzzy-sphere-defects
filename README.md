@@ -1,7 +1,7 @@
 # fuzzy-sphere-defects
 
 Supporting code and data for the paper *Monodromy Defects and Bulk Renormalization Group Flows on the Fuzzy Sphere*
-by Kimyeong Lee and Joydeep Naskar, arXiv:2611.XXXXX.
+by Kimyeong Lee and Joydeep Naskar, arXiv:2611.10815.
 
 We put monodromy (twist) line defects of the 3d Ising, O(2), O(3) and O(4) critical points on the fuzzy sphere by
 giving the twisted fermion flavours a fractional Aharonov–Bohm flux through the poles. The lowest Landau level then
