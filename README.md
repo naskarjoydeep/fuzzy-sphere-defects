@@ -13,7 +13,7 @@ integral. We diagonalize the resulting Hamiltonians exactly (ED) or with DMRG.
 If you use this code or data, please cite:
 
 ```bibtex
-@article{Lee:2026xxx,
+@article{Lee:2026oeq,
     author = "Lee, Kimyeong and Naskar, Joydeep",
     title = "{Monodromy Defects and Bulk Renormalization Group Flows on the Fuzzy Sphere}",
     eprint = "2611.10815",
